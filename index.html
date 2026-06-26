@@ -26,7 +26,7 @@ canvas{position:fixed;inset:0;pointer-events:none;z-index:-1}
 #topBtn.show{opacity:1;pointer-events:auto}
 section{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:25px}
 .card{max-width:900px;width:100%;padding:50px;border-radius:30px;background:var(--glass);backdrop-filter:blur(25px);border:1px solid var(--border);text-align:center}
-h1{font-size:clamp(2.8rem,8vw,5.6rem);background:linear-gradient(90deg,#ff4d9d,#7b61ff,#35d7ff,#90ff64,#ff4d9d);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rain 8s linear infinite}
+h1{font-size:clamp(2rem,7vw,5.4rem);line-height:1.08;word-break:break-word;padding:0 .2rem;background:linear-gradient(90deg,#ff4d9d,#7b61ff,#35d7ff,#90ff64,#ff4d9d);background-size:300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:rain 8s linear infinite}
 @keyframes rain{to{background-position:300%}}
 .btn{margin-top:20px;padding:14px 28px;border:none;border-radius:999px;background:linear-gradient(90deg,#6d5cff,#ff3ca6);color:#fff;font-weight:700;cursor:pointer}
 .rocket{width:72px;margin:35px auto 0;cursor:pointer;animation:float 2.2s ease-in-out infinite}
@@ -38,12 +38,26 @@ h1{font-size:clamp(2.8rem,8vw,5.6rem);background:linear-gradient(90deg,#ff4d9d,#
 .social{display:flex;align-items:center;gap:12px;padding:15px;border-radius:16px;background:rgba(255,255,255,.05);text-decoration:none;color:var(--text);transition:.25s}
 .social:hover{transform:translateY(-4px);box-shadow:0 0 20px rgba(120,100,255,.4)}
 .icon{width:22px;height:22px;fill:currentColor}
+
+@media (max-width:768px){
+.card{padding:32px 22px;border-radius:22px}
+h1{font-size:clamp(1.8rem,9vw,3rem)}
+p{font-size:.98rem}
+.socials{grid-template-columns:1fr}
+.rocket{width:64px}
+}
+.toggle svg{width:28px;height:28px;display:block}
+
 </style>
 </head>
 <body>
 <div id="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
 <canvas id="c"></canvas>
-<button class="toggle" id="theme">☼</button>
+<button class="toggle" id="theme" aria-label="Theme">
+<svg id="themeIcon" viewBox="0 0 24 24">
+<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 1 0 9.8 9.8z" fill="currentColor"/>
+</svg>
+</button>
 <section>
 <div class="card">
 <h1 id="title"></h1>
@@ -75,7 +89,12 @@ h1{font-size:clamp(2.8rem,8vw,5.6rem);background:linear-gradient(90deg,#ff4d9d,#
 <button id="topBtn">↑</button>
 <script>
 const t="SITE UNDER CONSTRUCTION";let i=0;function s(){title.textContent=t.slice(0,i)+Array.from({length:t.length-i},()=>String.fromCharCode(65+Math.random()*26)).join("");if(i<=t.length){i++;setTimeout(s,40)}else title.textContent=t}s();
-theme.onclick=()=>document.body.classList.toggle("light");
+theme.onclick=()=>{
+document.body.classList.toggle("light");
+themeIcon.innerHTML=document.body.classList.contains("light")
+?'<circle cx="12" cy="12" r="5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22.5"/><line x1="1.5" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22.5" y2="12"/><line x1="4" y1="4" x2="5.8" y2="5.8"/><line x1="18.2" y1="18.2" x2="20" y2="20"/><line x1="20" y1="4" x2="18.2" y2="5.8"/><line x1="4" y1="20" x2="5.8" y2="18.2"/></g>'
+:'<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 1 0 9.8 9.8z" fill="currentColor"/>';
+};
 function go(){down.classList.add("launch");setTimeout(()=>{scrollTo({top:contact.offsetTop,behavior:"smooth"});down.classList.remove("launch")},400)}
 more.onclick=go;down.onclick=go;
 new IntersectionObserver(e=>e.forEach(x=>x.isIntersecting&&info.classList.add("show"))).observe(info);
