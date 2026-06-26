@@ -2,262 +2,170 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Under Construction</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Site Under Construction</title>
 <style>
 :root{
-    --bg:#080b12;
-    --card:rgba(255,255,255,0.08);
-    --text:#ffffff;
+--bg:#070b16;--text:#fff;--glass:rgba(255,255,255,.08);--border:rgba(255,255,255,.12);
 }
-
 body.light{
-    --bg:#f4f4f4;
-    --card:rgba(255,255,255,0.7);
-    --text:#111;
+--bg:#eef3fb;--text:#111;--glass:rgba(255,255,255,.65);--border:rgba(255,255,255,.5);
 }
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    scroll-behavior:smooth;
-}
-
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
-    font-family:Poppins,sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    transition:0.4s;
-    overflow-x:hidden;
+font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+background:var(--bg);color:var(--text);
+overflow-x:hidden;transition:.4s;
 }
-
-body::before{
-    content:'';
-    position:fixed;
-    width:500px;
-    height:500px;
-    background:#5b6cff;
-    filter:blur(180px);
-    top:-100px;
-    left:-100px;
-    opacity:.3;
+#bg{position:fixed;inset:0;overflow:hidden;z-index:-3}
+.blob{
+position:absolute;width:40vw;height:40vw;border-radius:50%;
+filter:blur(80px);opacity:.45;
+animation:move 20s ease-in-out infinite alternate;
 }
-
-body::after{
-    content:'';
-    position:fixed;
-    width:500px;
-    height:500px;
-    background:#ff3cac;
-    filter:blur(180px);
-    bottom:-100px;
-    right:-100px;
-    opacity:.3;
+.b1{background:#6d5cff;left:-10%;top:-10%}
+.b2{background:#00d9ff;right:-10%;top:20%;animation-duration:28s}
+.b3{background:#ff3ca6;left:20%;bottom:-15%;animation-duration:24s}
+@keyframes move{
+to{transform:translate(120px,-80px) scale(1.2) rotate(40deg)}
 }
-
+canvas{position:fixed;inset:0;pointer-events:none;z-index:-2}
 .toggle{
-    position:fixed;
-    top:20px;
-    right:20px;
-    width:50px;
-    height:50px;
-    border:none;
-    border-radius:50%;
-    background:var(--card);
-    backdrop-filter:blur(20px);
-    color:var(--text);
-    cursor:pointer;
-    font-size:22px;
+position:fixed;top:18px;right:18px;width:52px;height:52px;border-radius:50%;
+border:1px solid var(--border);background:var(--glass);backdrop-filter:blur(20px);
+display:grid;place-items:center;cursor:pointer;
 }
-
-.hero{
-    height:100vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    padding:20px;
-}
-
-.title{
-    font-size:4rem;
-    font-weight:700;
-    background:linear-gradient(
-        90deg,
-        #ff0080,
-        #7928ca,
-        #2afadf,
-        #ffcc00,
-        #ff0080
-    );
-    background-size:300%;
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-    animation:rainbow 8s linear infinite;
-    filter:drop-shadow(0 0 20px rgba(255,255,255,.3));
-}
-
-@keyframes rainbow{
-    0%{background-position:0%;}
-    100%{background-position:300%;}
-}
-
-.subtitle{
-    margin-top:20px;
-    font-size:1.1rem;
-    opacity:.8;
-}
-
+.toggle svg{width:24px;height:24px;fill:currentColor;color:var(--text)}
+section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:30px}
 .card{
-    margin-top:40px;
-    padding:20px 30px;
-    background:var(--card);
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:20px;
-    backdrop-filter:blur(20px);
+max-width:900px;width:100%;
+background:var(--glass);
+border:1px solid var(--border);
+backdrop-filter:blur(24px);
+border-radius:28px;
+padding:50px;
+text-align:center;
+box-shadow:0 10px 60px rgba(0,0,0,.25);
 }
-
-.button{
-    margin-top:30px;
-    padding:14px 30px;
-    border:none;
-    border-radius:50px;
-    font-size:16px;
-    cursor:pointer;
-    color:white;
-    background:linear-gradient(90deg,#6a5cff,#ff4ecd);
-    box-shadow:0 0 30px rgba(255,0,200,.4);
+h1{
+font-size:clamp(2.5rem,8vw,5.5rem);
+font-weight:900;
+background:linear-gradient(90deg,#ff4d9d,#7b61ff,#32d6ff,#8dff5b,#ffd84d,#ff4d9d);
+background-size:300% auto;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:rainbow 8s linear infinite;
+filter:drop-shadow(0 0 18px rgba(255,255,255,.25));
 }
-
-.more{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:30px;
+@keyframes rainbow{to{background-position:300% center}}
+p{margin:18px auto;font-size:1.1rem;opacity:.9;max-width:700px}
+.btn{
+display:inline-block;margin-top:20px;padding:14px 28px;border-radius:999px;
+background:linear-gradient(90deg,#6d5cff,#ff3ca6);
+color:#fff;border:none;font-weight:700;cursor:pointer;
+transition:.25s;
+box-shadow:0 0 25px rgba(125,92,255,.5);
 }
-
-.info{
-    max-width:500px;
-    text-align:center;
-    padding:40px;
-    border-radius:30px;
-    background:var(--card);
-    backdrop-filter:blur(20px);
-}
-
-.info h2{
-    margin-bottom:20px;
-}
-
-.info p{
-    margin:10px 0;
-}
-
-a{
-    color:#67a8ff;
-    text-decoration:none;
-}
-
+.btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 0 40px rgba(255,60,166,.6)}
 .arrow{
-    position:absolute;
-    bottom:30px;
-    font-size:30px;
-    animation:float 2s infinite;
+margin-top:35px;font-size:36px;cursor:pointer;animation:bounce 1.8s infinite;
 }
-
-@keyframes float{
-    0%,100%{
-        transform:translateY(0);
-    }
-    50%{
-        transform:translateY(10px);
-    }
-}
-
-@media(max-width:700px){
-    .title{
-        font-size:2.5rem;
-    }
-}
+@keyframes bounce{50%{transform:translateY(10px)}}
+.info{opacity:0;transform:translateY(60px);transition:1s}
+.info.show{opacity:1;transform:none}
+a{color:#53b7ff;text-decoration:none}
+.status{display:inline-flex;gap:10px;align-items:center;margin-bottom:18px;font-size:.95rem}
+.dot{width:10px;height:10px;border-radius:50%;background:#33ff77;box-shadow:0 0 12px #33ff77;animation:pulse 1.5s infinite}
+@keyframes pulse{50%{transform:scale(1.4);opacity:.6}}
 </style>
 </head>
-
 <body>
+<div id="bg">
+<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+</div>
+<canvas id="c"></canvas>
 
-<button class="toggle" onclick="toggleMode()">🌙</button>
+<button class="toggle" id="theme" aria-label="Toggle Theme">
+<svg viewBox="0 0 24 24"><path d="M12 3a1 1 0 011 1v1a1 1 0 11-2 0V4a1 1 0 011-1zm0 15a4 4 0 100-8 4 4 0 000 8zm8-5h-1a1 1 0 100 2h1a1 1 0 100-2zM5 12a1 1 0 01-1 1H3a1 1 0 110-2h1a1 1 0 011 1zm11.95-6.364a1 1 0 011.414 0l.707.707a1 1 0 11-1.414 1.414l-.707-.707a1 1 0 010-1.414zM5.343 17.95a1 1 0 011.414 0l.707.707A1 1 0 016.05 20.07l-.707-.707a1 1 0 010-1.414zm12.728 0a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM6.757 5.636a1 1 0 010 1.414l-.707.707A1 1 0 014.636 6.343l.707-.707a1 1 0 011.414 0z"/></svg>
+</button>
 
-<section class="hero">
-
-    <div class="card">
-        <h1 class="title">
-            Site Under Construction
-        </h1>
-
-        <p class="subtitle">
-            We're building something amazing.<br>
-            Please come back soon.
-        </p>
-
-        <button class="button"
-        onclick="document.getElementById('info').scrollIntoView()">
-            More Info
-        </button>
-    </div>
-
-    <div class="arrow">
-        ↓
-    </div>
-
+<section>
+<div class="card">
+<div class="status"><span class="dot"></span><span>Building something amazing...</span></div>
+<h1 id="title"></h1>
+<p>Our new experience is currently under development. Thank you for your patience.</p>
+<button class="btn" id="more">More Information</button>
+<div class="arrow" id="down">⌄</div>
+</div>
 </section>
 
-<section class="more" id="info">
-    <div class="info">
-        <h2>Contact Information</h2>
-
-        <p>Email:</p>
-        <p>
-            <a href="mailto:robbi.rizaldi@yahoo.com">
-                robbi.rizaldi@yahoo.com
-            </a>
-        </p>
-
-        <br>
-
-        <p>Instagram:</p>
-        <p>
-            <a href="https://instagram.com/robbirizaldi">
-                @robbirizaldi
-            </a>
-        </p>
-
-        <br>
-
-        <p>
-            Thank you for your patience.
-        </p>
-    </div>
+<section id="contact">
+<div class="card info" id="info">
+<h2>Contact Information</h2>
+<p>Email<br><a href="mailto:your@email.com">your@email.com</a></p>
+<p>Instagram<br><a href="https://instagram.com/username">@username</a></p>
+<p>You can replace these with your own contact details.</p>
+</div>
 </section>
 
 <script>
-function toggleMode(){
-    document.body.classList.toggle("light");
-
-    const btn=document.querySelector(".toggle");
-
-    if(document.body.classList.contains("light")){
-        btn.innerHTML="☀️";
-    }else{
-        btn.innerHTML="🌙";
-    }
+const text="SITE UNDER CONSTRUCTION";
+let out="",i=0;
+const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+function scramble(){
+ if(i<=text.length){
+   out="";
+   for(let j=0;j<text.length;j++){
+      if(j<i) out+=text[j];
+      else out+=chars[Math.floor(Math.random()*chars.length)];
+   }
+   title.textContent=out;
+   i++;
+   requestAnimationFrame(()=>setTimeout(scramble,45));
+ }else title.textContent=text;
 }
-</script>
+scramble();
 
+theme.onclick=()=>document.body.classList.toggle("light");
+
+function go(){
+ window.scrollTo({top:document.getElementById("contact").offsetTop,behavior:"smooth"});
+}
+more.onclick=go;
+down.onclick=go;
+
+const obs=new IntersectionObserver(e=>{
+e.forEach(v=>{if(v.isIntersecting)v.target.classList.add("show");});
+});
+obs.observe(info);
+
+// particles
+const c=document.getElementById("c"),x=c.getContext("2d");
+function rs(){c.width=innerWidth;c.height=innerHeight}
+rs();addEventListener("resize",rs);
+let pts=[];
+for(let i=0;i<80;i++)pts.push({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5,r:Math.random()*2+1});
+let mx=innerWidth/2,my=innerHeight/2;
+addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY});
+addEventListener("touchmove",e=>{mx=e.touches[0].clientX;my=e.touches[0].clientY},{passive:true});
+(function a(){
+x.clearRect(0,0,c.width,c.height);
+for(const p of pts){
+p.x+=p.vx;p.y+=p.vy;
+if(p.x<0||p.x>c.width)p.vx*=-1;
+if(p.y<0||p.y>c.height)p.vy*=-1;
+const dx=mx-p.x,dy=my-p.y,d=Math.hypot(dx,dy);
+if(d<120){p.x-=dx*.003;p.y-=dy*.003;}
+x.beginPath();
+x.arc(p.x,p.y,p.r,0,6.28);
+x.fillStyle="rgba(255,255,255,.8)";
+x.shadowBlur=10;
+x.shadowColor="#8cf";
+x.fill();
+}
+requestAnimationFrame(a);
+})();
+</script>
 </body>
 </html>
