@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>rzd.my.id</title>
+    <title>RZD Sites</title>
     
     <!-- Font Modern: Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
@@ -20,6 +20,10 @@
             --shadow-color: rgba(0, 0, 0, 0.08);
             --shadow-active: rgba(0, 0, 0, 0.25);
             --header-border: rgba(0, 0, 0, 0.05);
+            
+            /* Variabel Baru untuk Frame/Box */
+            --frame-bg: rgba(255, 255, 255, 0.4);
+            --frame-border: rgba(0, 0, 0, 0.08);
         }
 
         [data-theme="dark"] {
@@ -27,9 +31,13 @@
             --text-color: #F9F6F0;
             --btn-bg: #2D2D2D;
             --btn-hover: #3D3D3D;
-            --shadow-color: rgba(255, 255, 255, 0.05);
-            --shadow-active: rgba(255, 255, 255, 0.15);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --shadow-active: rgba(0, 0, 0, 0.5);
             --header-border: rgba(255, 255, 255, 0.05);
+            
+            /* Variabel Baru untuk Frame/Box Mode Gelap */
+            --frame-bg: rgba(255, 255, 255, 0.03);
+            --frame-border: rgba(255, 255, 255, 0.08);
         }
 
         /* --- GLOBAL (Disable Copy) --- */
@@ -84,11 +92,25 @@
         main {
             flex: 1;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 20px;
             padding: 20px;
+        }
+
+        /* --- FRAME BOX UNTUK TOMBOL --- */
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+            padding: 40px 30px;
+            background-color: var(--frame-bg);
+            border: 1px solid var(--frame-border);
+            border-radius: 24px;
+            backdrop-filter: blur(10px); /* Efek blur modern */
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px var(--shadow-color);
         }
 
         .link-btn {
@@ -97,27 +119,25 @@
             justify-content: center;
             gap: 12px;
             width: 100%;
-            max-width: 320px;
-            padding: 18px 25px;
+            padding: 16px 25px;
             background-color: var(--btn-bg);
             color: var(--text-color);
             text-decoration: none;
             font-size: 1.1rem;
             font-weight: 500;
             border-radius: 50px;
-            box-shadow: 0 4px 15px var(--shadow-color);
             transition: all 0.3s ease;
         }
 
         .link-btn:hover {
             background-color: var(--btn-hover);
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px var(--shadow-color);
+            box-shadow: 0 6px 15px var(--shadow-color);
         }
 
         /* Efek Animasi Memutar & Shadow Saat Diklik */
         .link-btn:active {
-            transform: translateY(2px) rotate(4deg) scale(0.96);
+            transform: translateY(2px) rotate(3deg) scale(0.96);
             box-shadow: 0 12px 25px var(--shadow-active);
         }
 
@@ -148,25 +168,28 @@
 
     <!-- Body -->
     <main>
-        <!-- Tombol Email -->
-        <a href="mailto:#" target="_blank" rel="noopener noreferrer" class="link-btn">
-            <i class="fas fa-envelope"></i> Email
-        </a>
-        
-        <!-- Tombol Instagram -->
-        <a href="https://instagram.com/robbirizaldi" target="_blank" rel="noopener noreferrer" class="link-btn">
-            <i class="fab fa-instagram"></i> Instagram
-        </a>
-        
-        <!-- Tombol GitHub -->
-        <a href="https://github.com/robbirizaldi" target="_blank" rel="noopener noreferrer" class="link-btn">
-            <i class="fab fa-github"></i> GitHub
-        </a>
+        <!-- Wadah Frame Tipis -->
+        <div class="links-container">
+            <!-- Tombol Email -->
+            <a href="mailto:#" target="_blank" rel="noopener noreferrer" class="link-btn">
+                <i class="fas fa-envelope"></i> Email
+            </a>
+            
+            <!-- Tombol Instagram -->
+            <a href="https://instagram.com/#" target="_blank" rel="noopener noreferrer" class="link-btn">
+                <i class="fab fa-instagram"></i> Instagram
+            </a>
+            
+            <!-- Tombol GitHub -->
+            <a href="https://github.com/#" target="_blank" rel="noopener noreferrer" class="link-btn">
+                <i class="fab fa-github"></i> GitHub
+            </a>
+        </div>
     </main>
 
     <!-- Footer -->
     <footer>
-        &copy; <span id="year"></span> Made with Gemini, Github, Cloudflare, Idwebhost
+        &copy; <span id="year"></span> sponsored by gemini, github, cloudflare, idwebhost
     </footer>
 
     <!-- --- JAVASCRIPT --- -->
