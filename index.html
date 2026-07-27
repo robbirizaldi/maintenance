@@ -141,6 +141,20 @@
             padding-top: 20px;
         }
 
+        /* Styling Khusus Sub-menu (Email Dropdown) & Ikon */
+        .sub-link {
+            width: 88%;
+            margin: 0 auto;
+            padding: 12px 20px;
+            font-size: 1rem;
+        }
+
+        .icon-right {
+            margin-left: auto;
+            font-size: 1.1rem !important;
+            transition: transform 0.4s ease;
+        }
+
         .link-btn {
             display: flex;
             align-items: center;
@@ -202,10 +216,27 @@
         <!-- Wadah Frame Tipis -->
         <div class="links-container">
             <div class="links-wrapper">
-                <!-- Tombol Email -->
-                <a href="mailto:URL_EMAIL_KAMU@gmail.com" target="_blank" rel="noopener noreferrer" class="link-btn">
-                    <i class="fas fa-envelope"></i> Email
-                </a>
+                <!-- Group Email & Dropdown -->
+                <div style="display: flex; flex-direction: column;">
+                    <button id="toggle-email-btn" class="link-btn">
+                        <i class="fas fa-envelope"></i> Email <i class="fas fa-chevron-down icon-right" id="toggle-email-icon"></i>
+                    </button>
+                    
+                    <!-- Wadah Extra Email (Tersembunyi secara default) -->
+                    <div id="email-links" class="extra-wrapper">
+                        <div class="extra-inner">
+                            <a href="mailto:email1@gmail.com" target="_blank" rel="noopener noreferrer" class="link-btn sub-link">
+                                <i class="fab fa-google"></i> Gmail
+                            </a>
+                            <a href="mailto:email2@outlook.com" target="_blank" rel="noopener noreferrer" class="link-btn sub-link">
+                                <i class="fab fa-microsoft"></i> Outlook
+                            </a>
+                            <a href="mailto:email3@yahoo.com" target="_blank" rel="noopener noreferrer" class="link-btn sub-link">
+                                <i class="fab fa-yahoo"></i> Yahoo
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 
                 <!-- Tombol Instagram -->
                 <a href="https://instagram.com/URL_INSTAGRAM_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
@@ -243,6 +274,31 @@
                     </a>
                     <a href="https://soundcloud.com/URL_SOUNDCLOUD_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
                         <i class="fab fa-soundcloud"></i> SoundCloud
+                    </a>
+                    
+                    <!-- Tambahan Baru: WhatsApp, PayPal, Discord, Telegram -->
+                    <a href="https://wa.me/URL_WHATSAPP_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                    <a href="https://paypal.me/URL_PAYPAL_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                        <i class="fab fa-paypal"></i> PayPal
+                    </a>
+                    <a href="https://discord.com/users/URL_DISCORD_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                        <i class="fab fa-discord"></i> Discord
+                    </a>
+                    <a href="https://t.me/URL_TELEGRAM_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                        <i class="fab fa-telegram"></i> Telegram
+                    </a>
+
+                    <!-- Tambahan Baru: TikTok, Pinterest, Reddit -->
+                    <a href="https://tiktok.com/@URL_TIKTOK_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                        <i class="fab fa-tiktok"></i> TikTok
+                    </a>
+                    <a href="https://pinterest.com/URL_PINTEREST_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                        <i class="fab fa-pinterest"></i> Pinterest
+                    </a>
+                    <a href="https://reddit.com/user/URL_REDDIT_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                        <i class="fab fa-reddit"></i> Reddit
                     </a>
                 </div>
             </div>
@@ -283,24 +339,22 @@
             }
         });
 
-        // 3. Logika Tombol "Click to more"
-        const toggleMoreBtn = document.getElementById("toggle-more-btn");
-        const extraLinks = document.getElementById("extra-links");
-        const toggleText = document.getElementById("toggle-text");
-        const toggleBtnIcon = document.getElementById("toggle-btn-icon");
+        // 4. Logika Dropdown Khusus Email
+        const toggleEmailBtn = document.getElementById("toggle-email-btn");
+        const emailLinks = document.getElementById("email-links");
+        const toggleEmailIcon = document.getElementById("toggle-email-icon");
 
-        toggleMoreBtn.addEventListener("click", () => {
-            extraLinks.classList.toggle("show");
-            if (extraLinks.classList.contains("show")) {
-                toggleText.textContent = "Show less";
-                toggleBtnIcon.classList.replace("fa-plus", "fa-minus");
+        toggleEmailBtn.addEventListener("click", () => {
+            emailLinks.classList.toggle("show");
+            // Efek panah memutar ke atas saat dibuka
+            if (emailLinks.classList.contains("show")) {
+                toggleEmailIcon.style.transform = "rotate(180deg)";
             } else {
-                toggleText.textContent = "Click to more";
-                toggleBtnIcon.classList.replace("fa-minus", "fa-plus");
+                toggleEmailIcon.style.transform = "rotate(0deg)";
             }
         });
 
-        // 4. Tambahan Proteksi Keamanan via JavaScript (Opsional tapi memperkuat)
+        // 5. Tambahan Proteksi Keamanan via JavaScript (Opsional tapi memperkuat)
         document.addEventListener("keydown", function(e) {
             // Disable Ctrl+U (View Source), Ctrl+C (Copy), F12 (Inspect Element)
             if (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C')) {
