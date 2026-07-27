@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagPro - Modern & Lightweight Blog</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Config & Custom CSS -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            500: '#3b82f6', // Blue-500
+                            600: '#2563eb', // Blue-600
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom smooth transition for dark mode */
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .dropdown-menu {
+            transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+        }
+        .group:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200 font-sans flex flex-col min-h-screen">
+
+    <!-- Header / Navbar -->
+    <header class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50 transition-colors duration-300">
+        <div class="container mx-auto px-4 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="text-2xl font-bold text-brand-600 dark:text-brand-500 tracking-tight">
+                        <i class="fa-solid fa-bolt mr-1"></i> MagPro
+                    </a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex space-x-8 items-center">
+                    <a href="#" class="text-gray-600 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-500 font-medium transition-colors">Beranda</a>
+                    
+                    <!-- Dropdown Menu -->
+                    <div class="relative group py-5">
+                        <button class="text-gray-600 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-500 font-medium flex items-center transition-colors">
+                            Kategori <i class="fa-solid fa-chevron-down text-xs ml-1 mt-1"></i>
+                        </button>
+                        
+                        <!-- Dropdown Content -->
+                        <div class="absolute left-0 mt-3 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-xl dropdown-menu border border-gray-100 dark:border-gray-700 z-50">
+                            <div class="py-2">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white transition-colors">Teknologi</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white transition-colors">Gaya Hidup</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white transition-colors">Desain Web</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="#" class="text-gray-600 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-500 font-medium transition-colors">Tentang</a>
+                    <a href="#" class="text-gray-600 hover:text-brand-600 dark:text-gray-300 dark:hover:text-brand-500 font-medium transition-colors">Kontak</a>
+                </nav>
+
+                <!-- Actions: Dark Mode Toggle & Mobile Menu Btn -->
+                <div class="flex items-center space-x-4">
+                    <!-- Theme Toggle Button -->
+                    <button id="theme-toggle" class="p-2 rounded-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors focus:outline-none">
+                        <i id="theme-toggle-dark-icon" class="fa-solid fa-moon hidden"></i>
+                        <i id="theme-toggle-light-icon" class="fa-solid fa-sun hidden"></i>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-600 dark:text-gray-300 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-brand-600 dark:text-brand-500 bg-gray-50 dark:bg-gray-700">Beranda</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Teknologi</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Gaya Hidup</a>
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Tentang</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow container mx-auto px-4 lg:px-8 py-8 lg:py-12 flex flex-col lg:flex-row gap-8">
+        
+        <!-- Left Section: Articles (Approx 70% width) -->
+        <div class="w-full lg:w-2/3 space-y-8">
+            
+            <!-- Article 1 -->
+            <article class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 dark:border-gray-700">
+                <img src="https://placehold.co/800x400/2563eb/ffffff?text=AI+Masa+Depan" alt="Artikel 1" class="w-full h-64 object-cover">
+                <div class="p-6 md:p-8">
+                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3 space-x-4">
+                        <span><i class="fa-regular fa-calendar mr-1"></i> 27 Jul 2026</span>
+                        <span class="text-brand-600 dark:text-brand-500 font-medium">Teknologi</span>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white hover:text-brand-600 transition-colors">
+                        <a href="#">Masa Depan Kecerdasan Buatan di Industri Kreatif</a>
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-300 mb-5 line-clamp-3">
+                        Kecerdasan buatan kini tidak hanya digunakan untuk tugas analitik, tetapi mulai merambah ke dunia kreatif seperti desain, penulisan, dan musik. Bagaimana peran desainer di masa depan dengan hadirnya alat generatif ini?
+                    </p>
+                    <a href="#" class="inline-flex items-center font-medium text-brand-600 dark:text-brand-500 hover:underline">
+                        Baca Selengkapnya <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 2 -->
+            <article class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 dark:border-gray-700">
+                <img src="https://placehold.co/800x400/10b981/ffffff?text=Produktivitas+Kerja" alt="Artikel 2" class="w-full h-64 object-cover">
+                <div class="p-6 md:p-8">
+                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3 space-x-4">
+                        <span><i class="fa-regular fa-calendar mr-1"></i> 25 Jul 2026</span>
+                        <span class="text-green-600 dark:text-green-500 font-medium">Gaya Hidup</span>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white hover:text-brand-600 transition-colors">
+                        <a href="#">5 Cara Menjaga Produktivitas Saat Bekerja Remote</a>
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-300 mb-5 line-clamp-3">
+                        Bekerja dari rumah menawarkan fleksibilitas, namun tantangan utamanya adalah menjaga fokus. Berikut adalah strategi terbaik yang telah terbukti membantu para pekerja lepas untuk tetap produktif.
+                    </p>
+                    <a href="#" class="inline-flex items-center font-medium text-brand-600 dark:text-brand-500 hover:underline">
+                        Baca Selengkapnya <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Article 3 -->
+            <article class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 dark:border-gray-700">
+                <img src="https://placehold.co/800x400/8b5cf6/ffffff?text=Desain+Minimalis" alt="Artikel 3" class="w-full h-64 object-cover">
+                <div class="p-6 md:p-8">
+                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-3 space-x-4">
+                        <span><i class="fa-regular fa-calendar mr-1"></i> 20 Jul 2026</span>
+                        <span class="text-purple-600 dark:text-purple-500 font-medium">Desain Web</span>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-3 text-gray-900 dark:text-white hover:text-brand-600 transition-colors">
+                        <a href="#">Tren Desain Minimalis untuk Website Tahun Ini</a>
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-300 mb-5 line-clamp-3">
+                        Minimalisme tidak hanya tentang ruang kosong, melainkan tentang mengarahkan fokus pengguna pada elemen esensial. Temukan inspirasi desain ringan yang membuat website Anda lebih profesional.
+                    </p>
+                    <a href="#" class="inline-flex items-center font-medium text-brand-600 dark:text-brand-500 hover:underline">
+                        Baca Selengkapnya <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
+                    </a>
+                </div>
+            </article>
+
+            <!-- Pagination -->
+            <div class="flex justify-center md:justify-start items-center space-x-2 pt-6">
+                <a href="#" class="px-4 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-brand-600 transition-colors disabled:opacity-50">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <a href="#" class="px-4 py-2 border border-brand-500 bg-brand-500 text-white rounded-lg font-medium">1</a>
+                <a href="#" class="px-4 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-brand-600 transition-colors">2</a>
+                <a href="#" class="px-4 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-brand-600 transition-colors">3</a>
+                <span class="text-gray-500 dark:text-gray-400">...</span>
+                <a href="#" class="px-4 py-2 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-brand-600 transition-colors">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </div>
+
+        </div>
+
+        <!-- Right Section: Sidebar (Approx 30% width) -->
+        <aside class="w-full lg:w-1/3 space-y-8">
+            
+            <!-- Widget: About Author/Blog -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                    <i class="fa-solid fa-circle-info text-brand-500 mr-2"></i> Tentang MagPro
+                </h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    MagPro adalah portal artikel modern yang membahas teknologi, gaya hidup, dan desain. Kami fokus menyajikan tulisan berkualitas dengan antarmuka yang ringan dan cepat.
+                </p>
+            </div>
+
+            <!-- Widget: Recent Posts -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                    <i class="fa-solid fa-clock-rotate-left text-brand-500 mr-2"></i> Postingan Terbaru
+                </h3>
+                <ul class="space-y-4">
+                    <!-- Recent Post Item 1 -->
+                    <li class="flex items-start group">
+                        <img src="https://placehold.co/100x100/2563eb/ffffff?text=P1" alt="Thumb" class="w-16 h-16 rounded-lg object-cover mr-4 group-hover:opacity-80 transition-opacity">
+                        <div>
+                            <h4 class="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-brand-600 dark:group-hover:text-brand-500 transition-colors line-clamp-2">
+                                <a href="#">Review Framework Baru untuk Frontend Developer</a>
+                            </h4>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 block">26 Jul 2026</span>
+                        </div>
+                    </li>
+                    <!-- Recent Post Item 2 -->
+                    <li class="flex items-start group">
+                        <img src="https://placehold.co/100x100/10b981/ffffff?text=P2" alt="Thumb" class="w-16 h-16 rounded-lg object-cover mr-4 group-hover:opacity-80 transition-opacity">
+                        <div>
+                            <h4 class="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-brand-600 dark:group-hover:text-brand-500 transition-colors line-clamp-2">
+                                <a href="#">Tips Mengatur Keuangan untuk Freelancer</a>
+                            </h4>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 block">22 Jul 2026</span>
+                        </div>
+                    </li>
+                    <!-- Recent Post Item 3 -->
+                    <li class="flex items-start group">
+                        <img src="https://placehold.co/100x100/8b5cf6/ffffff?text=P3" alt="Thumb" class="w-16 h-16 rounded-lg object-cover mr-4 group-hover:opacity-80 transition-opacity">
+                        <div>
+                            <h4 class="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-brand-600 dark:group-hover:text-brand-500 transition-colors line-clamp-2">
+                                <a href="#">Mengapa UI/UX Sangat Penting Bagi Startup</a>
+                            </h4>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 block">18 Jul 2026</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Widget: Categories -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center">
+                    <i class="fa-solid fa-tags text-brand-500 mr-2"></i> Kategori
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                    <a href="#" class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/30 dark:hover:text-brand-400 transition-colors">Teknologi</a>
+                    <a href="#" class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/30 dark:hover:text-brand-400 transition-colors">Programming</a>
+                    <a href="#" class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/30 dark:hover:text-brand-400 transition-colors">Gaya Hidup</a>
+                    <a href="#" class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/30 dark:hover:text-brand-400 transition-colors">Bisnis</a>
+                    <a href="#" class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-900/30 dark:hover:text-brand-400 transition-colors">Desain Web</a>
+                </div>
+            </div>
+
+        </aside>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto transition-colors duration-300">
+        <div class="container mx-auto px-4 lg:px-8 py-10 lg:py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                
+                <!-- Footer Column 1: Info -->
+                <div>
+                    <a href="#" class="text-2xl font-bold text-brand-600 dark:text-brand-500 tracking-tight inline-block mb-4">
+                        <i class="fa-solid fa-bolt mr-1"></i> MagPro
+                    </a>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm leading-relaxed mb-4">
+                        Menjadi sumber inspirasi harian Anda dalam dunia teknologi, tren desain, dan gaya hidup produktif. Template ringan yang dirancang khusus untuk platform open-source seperti GitHub Pages.
+                    </p>
+                    <!-- Social Media -->
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-brand-500 hover:text-white transition-colors"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-brand-500 hover:text-white transition-colors"><i class="fa-brands fa-github"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-brand-500 hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- Footer Column 2: Quick Links -->
+                <div>
+                    <h4 class="text-gray-900 dark:text-white font-bold mb-4 uppercase text-sm tracking-wider">Tautan Berguna</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Tentang Kami</a></li>
+                        <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Kebijakan Privasi</a></li>
+                        <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Syarat & Ketentuan</a></li>
+                        <li><a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Pasang Iklan</a></li>
+                    </ul>
+                </div>
+
+                <!-- Footer Column 3: Contact Info -->
+                <div>
+                    <h4 class="text-gray-900 dark:text-white font-bold mb-4 uppercase text-sm tracking-wider">Hubungi Kami</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start text-sm text-gray-600 dark:text-gray-400">
+                            <i class="fa-solid fa-location-dot mt-1 mr-3 text-brand-500"></i>
+                            <span>Jl. Teknologi Inovasi No. 45<br>Jakarta Selatan, 12345</span>
+                        </li>
+                        <li class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                            <i class="fa-solid fa-envelope mr-3 text-brand-500"></i>
+                            <span>hello@magpro.github.io</span>
+                        </li>
+                        <li class="flex items-center text-sm text-gray-600 dark:text-gray-400">
+                            <i class="fa-solid fa-phone mr-3 text-brand-500"></i>
+                            <span>+62 811 2233 4455</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+            
+            <div class="border-t border-gray-200 dark:border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    &copy; 2026 MagPro Blog. Hak Cipta Dilindungi.
+                </p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 md:mt-0">
+                    Dibuat dengan <i class="fa-solid fa-heart text-red-500 mx-1"></i> menggunakan Tailwind CSS
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- Dark Mode Logic ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+        // Check Local Storage or System Preference
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            lightIcon.classList.remove('hidden');
+        } else {
+            document.documentElement.classList.remove('dark');
+            darkIcon.classList.remove('hidden');
+        }
+
+        // Listen for toggle click
+        themeToggleBtn.addEventListener('click', function() {
+            // Toggle Icons
+            darkIcon.classList.toggle('hidden');
+            lightIcon.classList.toggle('hidden');
+
+            // If set via local storage previously
+            if (localStorage.getItem('color-theme')) {
+                if (localStorage.getItem('color-theme') === 'light') {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                }
+            // If NOT set via local storage previously
+            } else {
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('color-theme', 'light');
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('color-theme', 'dark');
+                }
+            }
+        });
+
+        // --- Mobile Menu Toggle Logic ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
+</body>
+</html>
