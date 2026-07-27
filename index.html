@@ -150,12 +150,14 @@
         }
 
         .icon-right {
-            margin-left: auto;
+            position: absolute;
+            right: 25px;
             font-size: 1.1rem !important;
             transition: transform 0.4s ease;
         }
 
         .link-btn {
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -351,6 +353,23 @@
                 toggleEmailIcon.style.transform = "rotate(180deg)";
             } else {
                 toggleEmailIcon.style.transform = "rotate(0deg)";
+            }
+        });
+
+        // Logika Dropdown "Click to more"
+        const toggleMoreBtn = document.getElementById("toggle-more-btn");
+        const extraLinks = document.getElementById("extra-links");
+        const toggleBtnIcon = document.getElementById("toggle-btn-icon");
+        const toggleText = document.getElementById("toggle-text");
+
+        toggleMoreBtn.addEventListener("click", () => {
+            extraLinks.classList.toggle("show");
+            if (extraLinks.classList.contains("show")) {
+                toggleBtnIcon.classList.replace("fa-plus", "fa-minus");
+                toggleText.textContent = "Show less";
+            } else {
+                toggleBtnIcon.classList.replace("fa-minus", "fa-plus");
+                toggleText.textContent = "Click to more";
             }
         });
 
