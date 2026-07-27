@@ -199,41 +199,51 @@
         const copyIcon = document.getElementById('copy-icon');
         const checkIcon = document.getElementById('check-icon');
 
-        // Menggunakan API gratis dari is.gd dengan metode JSONP
-        // Metode ini digunakan untuk melewati pemblokiran CORS oleh browser
-        function shortenUrl(originalUrl) {
-            return new Promise((resolve, reject) => {
-                // 1. Buat nama fungsi callback yang unik
-                const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+        // Fungsi untuk memvalidasi dan memformat URL (otomatis tambah https://)
+        function formatUrl(url) {
+            if (!/^https?:\/\//i.test(url)) {
+                return 'https://' + url;
+            }
+            return url;
+        }
+
+        // Menggunakan Multiple API (Primary & Fallback) dengan CORS Proxy
+        async function shortenUrl(originalUrl) {
+            const formattedUrl = formatUrl(originalUrl);
+            
+            // 1. API Utama: spoo.me (Native CORS, Cepat & Sangat Stabil)
+            try {
+                const res = await fetch('https://spoo.me/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Accept': 'application/json'
+                    },
+                    body: `url=${encodeURIComponent(formattedUrl)}`
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.short_url) return data.short_url;
+                }
+            } catch (err) {
+                console.log("API spoo.me dialihkan ke fallback...");
+            }
+
+            // 2. API Cadangan: is.gd via Proxy (Bypass Blokir Keamanan di Preview)
+            try {
+                const isGdUrl = `https://is.gd/create.php?format=json&url=${encodeURIComponent(formattedUrl)}`;
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(isGdUrl)}`;
                 
-                // 2. Buat elemen tag <script> baru
-                const script = document.createElement('script');
-                
-                // 3. Daftarkan fungsi callback ke global window
-                window[callbackName] = function(data) {
-                    // Bersihkan jejak script setelah selesai
-                    delete window[callbackName];
-                    document.body.removeChild(script);
-                    
-                    // Cek apakah API mengembalikan shorturl atau error
-                    if (data.shorturl) {
-                        resolve(data.shorturl);
-                    } else {
-                        reject(new Error(data.errormessage || 'Gagal memendekkan URL'));
-                    }
-                };
-                
-                // 4. Tangani error jika koneksi gagal
-                script.onerror = function() {
-                    delete window[callbackName];
-                    document.body.removeChild(script);
-                    reject(new Error('Koneksi jaringan gagal atau diblokir.'));
-                };
-                
-                // 5. Eksekusi request dengan memasukkan tag script ke dalam body HTML
-                script.src = `https://is.gd/create.php?format=json&url=${encodeURIComponent(originalUrl)}&callback=${callbackName}`;
-                document.body.appendChild(script);
-            });
+                const res = await fetch(proxyUrl);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.shorturl) return data.shorturl;
+                }
+            } catch (err) {
+                console.error("API is.gd gagal:", err);
+            }
+
+            throw new Error('Server pemendek tautan sedang sibuk. Coba sesaat lagi.');
         }
 
         form.addEventListener('submit', async (e) => {
