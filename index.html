@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RZD Sites</title>
+    <title>Robbi Rizaldi</title>
     
     <!-- Font Modern: Poppins -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
     <!-- Ikon: FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         /* --- TEMA & WARNA (Pastel Mewah) --- */
@@ -101,7 +101,6 @@
         .links-container {
             display: flex;
             flex-direction: column;
-            gap: 20px;
             width: 100%;
             max-width: 400px;
             padding: 40px 30px;
@@ -111,6 +110,35 @@
             backdrop-filter: blur(10px); /* Efek blur modern */
             -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 10px 30px var(--shadow-color);
+        }
+
+        .links-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .extra-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s ease-in-out;
+        }
+
+        .extra-wrapper.show {
+            grid-template-rows: 1fr;
+        }
+
+        .extra-inner {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding-top: 0;
+            transition: padding-top 0.4s ease-in-out;
+        }
+
+        .extra-wrapper.show .extra-inner {
+            padding-top: 20px;
         }
 
         .link-btn {
@@ -126,6 +154,9 @@
             font-size: 1.1rem;
             font-weight: 500;
             border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
             transition: all 0.3s ease;
         }
 
@@ -160,7 +191,7 @@
 
     <!-- Header -->
     <header>
-        <h1>ROBBI RIZALDI</h1>
+        <h1>robbi rizaldi</h1>
         <button id="theme-toggle" title="Ganti Tema">
             <i class="fas fa-moon" id="theme-icon"></i>
         </button>
@@ -170,26 +201,57 @@
     <main>
         <!-- Wadah Frame Tipis -->
         <div class="links-container">
-            <!-- Tombol Email -->
-            <a href="#" target="_blank" rel="noopener noreferrer" class="link-btn">
-                <i class="fas fa-envelope"></i> Email
-            </a>
-            
-            <!-- Tombol Instagram -->
-            <a href="https://instagram.com/robbirizaldi" target="_blank" rel="noopener noreferrer" class="link-btn">
-                <i class="fab fa-instagram"></i> Instagram
-            </a>
-            
-            <!-- Tombol GitHub -->
-            <a href="https://github.com/robbirizaldi" target="_blank" rel="noopener noreferrer" class="link-btn">
-                <i class="fab fa-github"></i> GitHub
-            </a>
+            <div class="links-wrapper">
+                <!-- Tombol Email -->
+                <a href="mailto:URL_EMAIL_KAMU@gmail.com" target="_blank" rel="noopener noreferrer" class="link-btn">
+                    <i class="fas fa-envelope"></i> Email
+                </a>
+                
+                <!-- Tombol Instagram -->
+                <a href="https://instagram.com/URL_INSTAGRAM_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                    <i class="fab fa-instagram"></i> Instagram
+                </a>
+                
+                <!-- Tombol GitHub -->
+                <a href="https://github.com/URL_GITHUB_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+
+                <!-- Tombol Toggle More -->
+                <button id="toggle-more-btn" class="link-btn">
+                    <span id="toggle-text">Click to more</span> <i class="fas fa-plus" id="toggle-btn-icon"></i>
+                </button>
+            </div>
+
+            <!-- Wadah Extra Link (Tersembunyi secara default) -->
+            <div id="extra-links" class="extra-wrapper">
+                <div class="extra-inner">
+                    <a href="https://linkedin.com/in/URL_LINKEDIN_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                        <i class="fab fa-linkedin"></i> LinkedIn
+                    </a>
+                    <a href="https://twitter.com/URL_TWITTER_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                        <i class="fab fa-x-twitter"></i> Twitter
+                    </a>
+                    <a href="https://threads.net/@URL_THREADS_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                        <i class="fab fa-threads"></i> Threads
+                    </a>
+                    <a href="https://facebook.com/URL_FACEBOOK_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                        <i class="fab fa-facebook"></i> Facebook
+                    </a>
+                    <a href="https://youtube.com/c/URL_YOUTUBE_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                        <i class="fab fa-youtube"></i> YouTube
+                    </a>
+                    <a href="https://soundcloud.com/URL_SOUNDCLOUD_KAMU" target="_blank" rel="noopener noreferrer" class="link-btn">
+                        <i class="fab fa-soundcloud"></i> SoundCloud
+                    </a>
+                </div>
+            </div>
         </div>
     </main>
 
     <!-- Footer -->
     <footer>
-        &copy; <span id="year"></span> Made with Gemini, Github, Cloudflare, Idwebhost.
+        &copy; <span id="year"></span> sponsored by gemini, github, cloudflare, idwebhost
     </footer>
 
     <!-- --- JAVASCRIPT --- -->
@@ -221,7 +283,24 @@
             }
         });
 
-        // 3. Tambahan Proteksi Keamanan via JavaScript (Opsional tapi memperkuat)
+        // 3. Logika Tombol "Click to more"
+        const toggleMoreBtn = document.getElementById("toggle-more-btn");
+        const extraLinks = document.getElementById("extra-links");
+        const toggleText = document.getElementById("toggle-text");
+        const toggleBtnIcon = document.getElementById("toggle-btn-icon");
+
+        toggleMoreBtn.addEventListener("click", () => {
+            extraLinks.classList.toggle("show");
+            if (extraLinks.classList.contains("show")) {
+                toggleText.textContent = "Show less";
+                toggleBtnIcon.classList.replace("fa-plus", "fa-minus");
+            } else {
+                toggleText.textContent = "Click to more";
+                toggleBtnIcon.classList.replace("fa-minus", "fa-plus");
+            }
+        });
+
+        // 4. Tambahan Proteksi Keamanan via JavaScript (Opsional tapi memperkuat)
         document.addEventListener("keydown", function(e) {
             // Disable Ctrl+U (View Source), Ctrl+C (Copy), F12 (Inspect Element)
             if (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 'c' || e.key === 'C')) {
