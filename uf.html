@@ -11,118 +11,51 @@
             --primary: #0095f6;
             --primary-hover: #0077c5;
             --text-main: #262626;
-            --text-muted: #8e8e8e;
             --border: #dbdbdb;
             --danger: #ed4956;
+            --success: #28a745;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            line-height: 1.6;
             padding: 20px;
             margin: 0;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        .container { max-width: 800px; margin: 0 auto; }
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 8px;
             padding: 24px;
             margin-bottom: 20px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-        h1, h2 {
-            text-align: center;
-            margin-top: 0;
-        }
-        .upload-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
+        h1, h2 { text-align: center; margin-top: 0; }
+        .upload-group { margin-bottom: 20px; font-weight: bold;}
         input[type="file"] {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            border: 1px dashed var(--primary);
-            border-radius: 4px;
-            background-color: #f9f9f9;
-            cursor: pointer;
+            display: block; width: 100%; padding: 10px; border: 1px dashed var(--primary);
+            border-radius: 4px; background-color: #f9f9f9; margin-top: 8px;
         }
         button {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            width: 100%;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s;
+            background-color: var(--primary); color: white; border: none; padding: 12px 20px;
+            width: 100%; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer;
         }
-        button:hover {
-            background-color: var(--primary-hover);
+        button:hover { background-color: var(--primary-hover); }
+        .stats { display: flex; justify-content: space-around; text-align: center; margin-bottom: 20px;}
+        .stat-box { background: #f9f9f9; padding: 15px; border-radius: 8px; width: 30%; border: 1px solid var(--border); }
+        .stat-box span { display: block; font-size: 24px; font-weight: bold; color: var(--primary); }
+        
+        select {
+            width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border);
+            font-size: 16px; margin-bottom: 15px; font-weight: bold; background: #fafafa;
         }
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .stat-box {
-            background: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            width: 30%;
-            border: 1px solid var(--border);
-        }
-        .stat-box span {
-            display: block;
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--primary);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        th {
-            background-color: #f9f9f9;
-        }
-        a {
-            color: var(--primary);
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        #results {
-            display: none;
-        }
-        #warningMessage {
-            display: none;
-            background-color: #ffeaea;
-            color: var(--danger);
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            border: 1px solid #ffc2c2;
-            font-size: 14px;
-        }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background-color: #f9f9f9; }
+        a { color: var(--primary); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        #results, #warningMessage { display: none; }
+        #warningMessage { background-color: #ffeaea; color: var(--danger); padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #ffc2c2;}
     </style>
 </head>
 <body>
@@ -130,17 +63,17 @@
 <div class="container">
     <div class="card">
         <h1>Cek Unfollowers Instagram</h1>
-        <p style="text-align: center; color: var(--text-muted);">Pilih file JSON dari hasil download data Instagram Anda.</p>
+        <p style="text-align: center;">Pilih file JSON dari hasil download data Instagram Anda.</p>
         
         <div id="warningMessage"></div>
 
         <div class="upload-group">
-            <label for="followersFile">1. Upload File Followers (followers_1.json)</label>
+            <label>1. Upload File Followers (Pengikut)</label>
             <input type="file" id="followersFile" accept=".json">
         </div>
 
         <div class="upload-group">
-            <label for="followingFile">2. Upload File Following (following.json)</label>
+            <label>2. Upload File Following (Mengikuti)</label>
             <input type="file" id="followingFile" accept=".json">
         </div>
 
@@ -151,19 +84,16 @@
         <h2>Hasil Analisis</h2>
         
         <div class="stats">
-            <div class="stat-box">
-                Mengikuti
-                <span id="followingCount">0</span>
-            </div>
-            <div class="stat-box">
-                Pengikut
-                <span id="followersCount">0</span>
-            </div>
-            <div class="stat-box">
-                Tidak Follback
-                <span id="unfollowersCount">0</span>
-            </div>
+            <div class="stat-box">Mengikuti <span id="followingCount">0</span></div>
+            <div class="stat-box">Pengikut <span id="followersCount">0</span></div>
+            <div class="stat-box" style="border-color: var(--danger);">Tidak Follback <span id="unfollowersCount" style="color: var(--danger);">0</span></div>
         </div>
+
+        <select id="viewFilter">
+            <option value="notFollback">Kategori: ❌ Tidak Follback (Kamu follow, dia tidak)</option>
+            <option value="mutual">Kategori: 🤝 Saling Follow (Mutuals)</option>
+            <option value="fans">Kategori: 🌟 Fans (Dia follow, kamu tidak)</option>
+        </select>
 
         <table id="resultTable">
             <thead>
@@ -173,148 +103,125 @@
                     <th>Link Profil</th>
                 </tr>
             </thead>
-            <tbody>
-                <!-- Data will be populated here -->
-            </tbody>
+            <tbody></tbody>
         </table>
     </div>
 </div>
 
 <script>
-    // Algoritma Ekstraksi Agresif
+    // Menyaring HANYA Username Asli Instagram
     function extractUsernames(data) {
-        let usernames = new Set();
-        const ignoreList = ['_u', 'profile', 'instagram', 'home', 'explore', 'followers', 'following', 'settings'];
-
-        // Filter ketat agar tidak salah memasukkan string yang bukan username
-        function isValid(u) {
-            if (typeof u !== 'string') return false;
-            u = u.trim();
-            if (u.length === 0) return false;
-            if (u.includes(' ')) return false; // Username IG tidak ada spasi
-            if (u.includes('/')) return false; 
-            if (u.includes(':')) return false; 
-            if (ignoreList.includes(u.toLowerCase())) return false;
-            return true;
-        }
-
-        function add(u) {
-            if (isValid(u)) usernames.add(u);
-        }
-
-        // Sapu bersih seluruh lapisan file JSON
+        let usernamesMap = new Map(); // Menyimpan username lowercase sebagai key, dan nama asli sebagai value
+        
         function traverse(obj) {
             if (Array.isArray(obj)) {
-                if (obj.length > 0 && typeof obj[0] === 'string') {
-                    obj.forEach(add);
-                } else {
-                    obj.forEach(traverse);
-                }
+                obj.forEach(traverse);
             } else if (obj !== null && typeof obj === 'object') {
-                
-                // Cari di semua kemungkinan kunci (key) yang disembunyikan Instagram
-                add(obj.value);
-                add(obj.title);
-                add(obj.username);
-                add(obj.userName);
-
                 if (obj.string_list_data && Array.isArray(obj.string_list_data)) {
                     obj.string_list_data.forEach(item => {
-                        add(item.value);
-                        add(item.title);
+                        if (item.value && typeof item.value === 'string') {
+                            let uname = item.value.trim();
+                            if (uname !== '' && uname !== '_u') usernamesMap.set(uname.toLowerCase(), uname);
+                        }
                     });
+                } else if (obj.href && obj.value && typeof obj.value === 'string' && obj.href.includes('instagram.com')) {
+                    let uname = obj.value.trim();
+                    if (uname !== '' && uname !== '_u') usernamesMap.set(uname.toLowerCase(), uname);
                 }
-
-                // Ambil dari URL jika username diselipkan di link
-                const links = [obj.href, obj.url, obj.link];
-                links.forEach(link => {
-                    if (typeof link === 'string') {
-                        let match = link.match(/instagram\.com\/([a-zA-Z0-9._]+)/);
-                        if (match) add(match[1]);
-                    }
-                });
-
                 Object.values(obj).forEach(traverse);
             }
         }
-
         traverse(data);
-
-        // Jika cara di atas masih luput, baca mentah-mentah file teksnya menggunakan Regex
-        if (usernames.size === 0) {
-            const jsonString = JSON.stringify(data);
-            const keyRegex = /"(value|username|userName|title)"\s*:\s*"([^"]+)"/gi;
-            let match;
-            while ((match = keyRegex.exec(jsonString)) !== null) {
-                add(match[2]);
-            }
-        }
-        
-        return Array.from(usernames);
+        return usernamesMap;
     }
 
     function readFileAsJSON(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = (event) => {
-                try {
-                    resolve(JSON.parse(event.target.result));
-                } catch (e) {
-                    reject("Gagal membaca file JSON. Pastikan format file tidak rusak.");
-                }
+            reader.onload = (e) => {
+                try { resolve(JSON.parse(e.target.result)); } 
+                catch (err) { reject("File JSON rusak atau tidak valid."); }
             };
-            reader.onerror = (error) => reject(error);
             reader.readAsText(file);
         });
     }
+
+    let globalNotFollback = [];
+    let globalMutuals = [];
+    let globalFans = [];
+
+    function renderTable(dataArray) {
+        const tbody = document.querySelector('#resultTable tbody');
+        tbody.innerHTML = ''; 
+        if(dataArray.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Tidak ada data di kategori ini.</td></tr>';
+            return;
+        }
+        dataArray.forEach((username, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${index + 1}</td>
+                            <td><b>${username}</b></td>
+                            <td><a href="https://www.instagram.com/${username}" target="_blank">Buka Profil &rarr;</a></td>`;
+            tbody.appendChild(tr);
+        });
+    }
+
+    document.getElementById('viewFilter').addEventListener('change', (e) => {
+        if(e.target.value === 'notFollback') renderTable(globalNotFollback);
+        if(e.target.value === 'mutual') renderTable(globalMutuals);
+        if(e.target.value === 'fans') renderTable(globalFans);
+    });
 
     document.getElementById('analyzeBtn').addEventListener('click', async () => {
         const followersInput = document.getElementById('followersFile').files[0];
         const followingInput = document.getElementById('followingFile').files[0];
         const warningDiv = document.getElementById('warningMessage');
-
         warningDiv.style.display = 'none';
 
-        if (!followersInput || !followingInput) {
-            alert('Mohon upload kedua file: Followers dan Following terlebih dahulu.');
-            return;
-        }
+        if (!followersInput || !followingInput) return alert('Mohon upload kedua file JSON.');
 
         const btn = document.getElementById('analyzeBtn');
-        btn.innerText = 'Memproses...';
-        btn.disabled = true;
+        btn.innerText = 'Memproses...'; btn.disabled = true;
 
         try {
             const followersData = await readFileAsJSON(followersInput);
             const followingData = await readFileAsJSON(followingInput);
 
-            const followersList = extractUsernames(followersData);
-            const followingList = extractUsernames(followingData);
+            // Ekstrak dalam format Map() agar huruf besar/kecil tidak jadi masalah
+            const followersMap = extractUsernames(followersData);
+            const followingMap = extractUsernames(followingData);
 
-            if (followingList.length === 0) {
-                 warningDiv.innerHTML = "⚠️ <b>Peringatan:</b> Masih 0 Akun 'Mengikuti' yang terbaca. File <code>following.json</code> Anda mungkin ter-export dalam keadaan kosong oleh Instagram.";
+            if (followingMap.size === 0) {
+                 warningDiv.innerHTML = "⚠️ <b>PERHATIAN:</b> Angka 'Mengikuti' adalah 0. Ini berarti file <code>following.json</code> dari Instagram Anda benar-benar kosong/corrupt. Solusinya: Anda harus meminta ulang download data dari Instagram Anda.";
                  warningDiv.style.display = 'block';
             }
 
-            const followersSet = new Set(followersList);
-            const notFollowingBack = followingList.filter(user => !followersSet.has(user));
+            globalNotFollback = [];
+            globalMutuals = [];
+            globalFans = [];
 
-            document.getElementById('followersCount').innerText = followersList.length;
-            document.getElementById('followingCount').innerText = followingList.length;
-            document.getElementById('unfollowersCount').innerText = notFollowingBack.length;
-
-            const tbody = document.querySelector('#resultTable tbody');
-            tbody.innerHTML = ''; 
-
-            notFollowingBack.forEach((username, index) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td><b>${username}</b></td>
-                    <td><a href="https://www.instagram.com/${username}" target="_blank">Buka Profil &rarr;</a></td>
-                `;
-                tbody.appendChild(tr);
+            // Cek Saling Follow & Tidak Follback
+            followingMap.forEach((originalName, lowerName) => {
+                if (followersMap.has(lowerName)) {
+                    globalMutuals.push(originalName);
+                } else {
+                    globalNotFollback.push(originalName);
+                }
             });
+
+            // Cek Fans (Dia follow kita, kita tidak follback)
+            followersMap.forEach((originalName, lowerName) => {
+                if (!followingMap.has(lowerName)) {
+                    globalFans.push(originalName);
+                }
+            });
+
+            document.getElementById('followersCount').innerText = followersMap.size;
+            document.getElementById('followingCount').innerText = followingMap.size;
+            document.getElementById('unfollowersCount').innerText = globalNotFollback.length;
+
+            document.getElementById('viewFilter').value = 'notFollback';
+            renderTable(globalNotFollback);
 
             document.getElementById('results').style.display = 'block';
             btn.innerText = 'Analisis Selesai (Ulangi)';
@@ -322,11 +229,9 @@
 
         } catch (error) {
             alert('Terjadi kesalahan: ' + error);
-            btn.innerText = 'Analisis Sekarang';
-            btn.disabled = false;
+            btn.innerText = 'Analisis Sekarang'; btn.disabled = false;
         }
     });
 </script>
-
 </body>
 </html>
