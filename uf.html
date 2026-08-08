@@ -181,49 +181,72 @@
 </div>
 
 <script>
+    // Algoritma Ekstraksi Agresif
     function extractUsernames(data) {
         let usernames = new Set();
-        
-        // Metode 1: Traversal Objek (Struktur JSON Standar)
+        const ignoreList = ['_u', 'profile', 'instagram', 'home', 'explore', 'followers', 'following', 'settings'];
+
+        // Filter ketat agar tidak salah memasukkan string yang bukan username
+        function isValid(u) {
+            if (typeof u !== 'string') return false;
+            u = u.trim();
+            if (u.length === 0) return false;
+            if (u.includes(' ')) return false; // Username IG tidak ada spasi
+            if (u.includes('/')) return false; 
+            if (u.includes(':')) return false; 
+            if (ignoreList.includes(u.toLowerCase())) return false;
+            return true;
+        }
+
+        function add(u) {
+            if (isValid(u)) usernames.add(u);
+        }
+
+        // Sapu bersih seluruh lapisan file JSON
         function traverse(obj) {
             if (Array.isArray(obj)) {
-                obj.forEach(traverse);
+                if (obj.length > 0 && typeof obj[0] === 'string') {
+                    obj.forEach(add);
+                } else {
+                    obj.forEach(traverse);
+                }
             } else if (obj !== null && typeof obj === 'object') {
+                
+                // Cari di semua kemungkinan kunci (key) yang disembunyikan Instagram
+                add(obj.value);
+                add(obj.title);
+                add(obj.username);
+                add(obj.userName);
+
                 if (obj.string_list_data && Array.isArray(obj.string_list_data)) {
                     obj.string_list_data.forEach(item => {
-                        if (item.value && typeof item.value === 'string') {
-                            usernames.add(item.value);
-                        }
+                        add(item.value);
+                        add(item.title);
                     });
                 }
-                if (obj.href && typeof obj.href === 'string' && obj.href.includes('instagram.com') && obj.value) {
-                    usernames.add(obj.value);
-                }
+
+                // Ambil dari URL jika username diselipkan di link
+                const links = [obj.href, obj.url, obj.link];
+                links.forEach(link => {
+                    if (typeof link === 'string') {
+                        let match = link.match(/instagram\.com\/([a-zA-Z0-9._]+)/);
+                        if (match) add(match[1]);
+                    }
+                });
+
                 Object.values(obj).forEach(traverse);
             }
         }
+
         traverse(data);
 
-        // Metode 2: Extrem Regex Parsing (Jika Metode 1 gagal / menghasilkan 0)
-        // Ini akan membaca mentah-mentah file tersebut, apa pun struktur JSON-nya
+        // Jika cara di atas masih luput, baca mentah-mentah file teksnya menggunakan Regex
         if (usernames.size === 0) {
             const jsonString = JSON.stringify(data);
-            
-            // Ekstrak dari value object langsung
-            const valueRegex = /"value"\s*:\s*"([^"]+)"/g;
+            const keyRegex = /"(value|username|userName|title)"\s*:\s*"([^"]+)"/gi;
             let match;
-            while ((match = valueRegex.exec(jsonString)) !== null) {
-                usernames.add(match[1]);
-            }
-
-            // Ekstrak dari link URL yang terselip
-            const urlRegex = /instagram\.com\/([a-zA-Z0-9._]+)/g;
-            const ignoreList = ['p', 'reel', 'stories', 'explore', 'direct', 'tv', 'about', 'legal', 'help'];
-            while ((match = urlRegex.exec(jsonString)) !== null) {
-                const uname = match[1];
-                if (!ignoreList.includes(uname.toLowerCase())) {
-                    usernames.add(uname);
-                }
+            while ((match = keyRegex.exec(jsonString)) !== null) {
+                add(match[2]);
             }
         }
         
@@ -268,17 +291,14 @@
             const followersList = extractUsernames(followersData);
             const followingList = extractUsernames(followingData);
 
-            // Jika kode ekstrem masih gagal menemukan data, berarti filenya benar-benar kosong dari Instagram
             if (followingList.length === 0) {
-                 warningDiv.innerHTML = "⚠️ <b>Peringatan:</b> Masih 0 Akun 'Mengikuti' yang terbaca.<br><br><b>Kemungkinan Penyebab:</b><br>File <code>following.json</code> yang Anda download dari Instagram sepertinya <b>benar-benar kosong / corrupt</b>. Silakan coba buka file tersebut dengan aplikasi Notepad. Jika isinya sangat pendek (misal hanya <code>{}</code> atau kosong), Anda perlu me-request ulang download data dari Instagram Anda.";
+                 warningDiv.innerHTML = "⚠️ <b>Peringatan:</b> Masih 0 Akun 'Mengikuti' yang terbaca. File <code>following.json</code> Anda mungkin ter-export dalam keadaan kosong oleh Instagram.";
                  warningDiv.style.display = 'block';
             }
 
-            // Hitung siapa yang tidak follback
             const followersSet = new Set(followersList);
             const notFollowingBack = followingList.filter(user => !followersSet.has(user));
 
-            // Tampilkan hasil
             document.getElementById('followersCount').innerText = followersList.length;
             document.getElementById('followingCount').innerText = followingList.length;
             document.getElementById('unfollowersCount').innerText = notFollowingBack.length;
