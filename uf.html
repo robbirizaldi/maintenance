@@ -34,7 +34,7 @@
         .upload-group { margin-bottom: 20px; font-weight: bold;}
         input[type="file"] {
             display: block; width: 100%; padding: 10px; border: 1px dashed var(--primary);
-            border-radius: 4px; background-color: #f9f9f9; margin-top: 8px;
+            border-radius: 4px; background-color: #f9f9f9; margin-top: 8px; cursor: pointer;
         }
         button {
             background-color: var(--primary); color: white; border: none; padding: 12px 20px;
@@ -109,29 +109,53 @@
 </div>
 
 <script>
-    // Menyaring HANYA Username Asli Instagram
+    // Fungsi Pemindai Super Deep & Universal untuk JSON Instagram
     function extractUsernames(data) {
-        let usernamesMap = new Map(); // Menyimpan username lowercase sebagai key, dan nama asli sebagai value
-        
-        function traverse(obj) {
-            if (Array.isArray(obj)) {
-                obj.forEach(traverse);
-            } else if (obj !== null && typeof obj === 'object') {
-                if (obj.string_list_data && Array.isArray(obj.string_list_data)) {
-                    obj.string_list_data.forEach(item => {
-                        if (item.value && typeof item.value === 'string') {
-                            let uname = item.value.trim();
-                            if (uname !== '' && uname !== '_u') usernamesMap.set(uname.toLowerCase(), uname);
-                        }
-                    });
-                } else if (obj.href && obj.value && typeof obj.value === 'string' && obj.href.includes('instagram.com')) {
-                    let uname = obj.value.trim();
-                    if (uname !== '' && uname !== '_u') usernamesMap.set(uname.toLowerCase(), uname);
+        let usernamesMap = new Map();
+
+        function add(u) {
+            if (typeof u === 'string') {
+                u = u.trim();
+                // Validasi ketat agar string sampah/sistem tidak masuk
+                if (u.length > 0 && u.length < 35 && !u.includes(' ') && !u.includes('/') && !u.includes('<') && !u.includes('http') && u.toLowerCase() !== '_u' && u.toLowerCase() !== 'instagram') {
+                    usernamesMap.set(u.toLowerCase(), u);
                 }
-                Object.values(obj).forEach(traverse);
             }
         }
-        traverse(data);
+
+        // Rekursif menyeluruh ke setiap objek dan array
+        function deepScan(obj) {
+            if (obj === null || obj === undefined) return;
+
+            if (Array.isArray(obj)) {
+                obj.forEach(deepScan);
+            } else if (typeof obj === 'object') {
+                // Ambil langsung jika properti umum ini ada
+                if (obj.value) add(obj.value);
+                if (obj.username) add(obj.username);
+                if (obj.title) add(obj.title);
+
+                // Telusuri semua isi properti objek secara membabi buta
+                for (let key in obj) {
+                    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                        deepScan(obj[key]);
+                    }
+                }
+            }
+        }
+
+        deepScan(data);
+
+        // Lapisan Pengaman Ekstra: Jika objek gagal mendeteksi, gunakan Regex pada teks mentah JSON
+        if (usernamesMap.size === 0) {
+            const rawString = JSON.stringify(data);
+            const regex = /"(?:value|username|title|name)"\s*:\s*"([^"]+)"/g;
+            let match;
+            while ((match = regex.exec(rawString)) !== null) {
+                add(match[1]);
+            }
+        }
+
         return usernamesMap;
     }
 
@@ -187,12 +211,11 @@
             const followersData = await readFileAsJSON(followersInput);
             const followingData = await readFileAsJSON(followingInput);
 
-            // Ekstrak dalam format Map() agar huruf besar/kecil tidak jadi masalah
             const followersMap = extractUsernames(followersData);
             const followingMap = extractUsernames(followingData);
 
             if (followingMap.size === 0) {
-                 warningDiv.innerHTML = "⚠️ <b>PERHATIAN:</b> Angka 'Mengikuti' adalah 0. Ini berarti file <code>following.json</code> dari Instagram Anda benar-benar kosong/corrupt. Solusinya: Anda harus meminta ulang download data dari Instagram Anda.";
+                 warningDiv.innerHTML = "⚠️ <b>PERHATIAN:</b> Angka 'Mengikuti' masih 0. Pastikan file <code>following.json</code> yang Anda upload benar-benar file dari folder <code>followers_and_following</code> Instagram, bukan file kosong/salah pilih.";
                  warningDiv.style.display = 'block';
             }
 
@@ -200,7 +223,6 @@
             globalMutuals = [];
             globalFans = [];
 
-            // Cek Saling Follow & Tidak Follback
             followingMap.forEach((originalName, lowerName) => {
                 if (followersMap.has(lowerName)) {
                     globalMutuals.push(originalName);
@@ -209,7 +231,6 @@
                 }
             });
 
-            // Cek Fans (Dia follow kita, kita tidak follback)
             followersMap.forEach((originalName, lowerName) => {
                 if (!followingMap.has(lowerName)) {
                     globalFans.push(originalName);
