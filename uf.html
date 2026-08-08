@@ -13,6 +13,7 @@
             --text-main: #262626;
             --text-muted: #8e8e8e;
             --border: #dbdbdb;
+            --danger: #ed4956;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -112,6 +113,16 @@
         #results {
             display: none;
         }
+        #warningMessage {
+            display: none;
+            background-color: #ffeaea;
+            color: var(--danger);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #ffc2c2;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -121,6 +132,8 @@
         <h1>Cek Unfollowers Instagram</h1>
         <p style="text-align: center; color: var(--text-muted);">Pilih file JSON dari hasil download data Instagram Anda.</p>
         
+        <div id="warningMessage"></div>
+
         <div class="upload-group">
             <label for="followersFile">1. Upload File Followers (followers_1.json)</label>
             <input type="file" id="followersFile" accept=".json">
@@ -168,7 +181,7 @@
 </div>
 
 <script>
-    // Fungsi untuk mengekstrak username dari struktur JSON Instagram yang bervariasi
+    // Fungsi pintar untuk mengekstrak username dari semua versi JSON Instagram
     function extractUsernames(data) {
         let usernames = new Set();
         
@@ -176,12 +189,20 @@
             if (Array.isArray(obj)) {
                 obj.forEach(traverse);
             } else if (obj !== null && typeof obj === 'object') {
-                // Pola umum JSON Instagram
+                // Pola 1: Format standar (string_list_data)
                 if (obj.string_list_data && Array.isArray(obj.string_list_data)) {
                     obj.string_list_data.forEach(item => {
-                        if (item.value) usernames.add(item.value);
+                        if (item.value && typeof item.value === 'string') {
+                            usernames.add(item.value);
+                        }
                     });
+                } 
+                // Pola 2: Format alternatif (langsung ada href dan value)
+                else if (obj.href && typeof obj.href === 'string' && obj.href.includes('instagram.com') && obj.value) {
+                    usernames.add(obj.value);
                 }
+
+                // Teruskan pencarian ke dalam objek
                 Object.values(obj).forEach(traverse);
             }
         }
@@ -190,7 +211,6 @@
         return Array.from(usernames);
     }
 
-    // Fungsi membaca file
     function readFileAsJSON(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -198,7 +218,7 @@
                 try {
                     resolve(JSON.parse(event.target.result));
                 } catch (e) {
-                    reject("Gagal mem-parsing JSON. Pastikan file valid.");
+                    reject("Gagal membaca file JSON. Pastikan filenya tidak rusak.");
                 }
             };
             reader.onerror = (error) => reject(error);
@@ -209,6 +229,9 @@
     document.getElementById('analyzeBtn').addEventListener('click', async () => {
         const followersInput = document.getElementById('followersFile').files[0];
         const followingInput = document.getElementById('followingFile').files[0];
+        const warningDiv = document.getElementById('warningMessage');
+
+        warningDiv.style.display = 'none';
 
         if (!followersInput || !followingInput) {
             alert('Mohon upload kedua file: Followers dan Following.');
@@ -226,6 +249,11 @@
             const followersList = extractUsernames(followersData);
             const followingList = extractUsernames(followingData);
 
+            if (followingList.length === 0) {
+                 warningDiv.innerText = "⚠️ Peringatan: 0 Akun 'Mengikuti' ditemukan. Pastikan Anda meng-upload file 'following.json' yang benar (bukan file kosong atau file lain).";
+                 warningDiv.style.display = 'block';
+            }
+
             // Hitung siapa yang tidak follback
             const followersSet = new Set(followersList);
             const notFollowingBack = followingList.filter(user => !followersSet.has(user));
@@ -236,7 +264,7 @@
             document.getElementById('unfollowersCount').innerText = notFollowingBack.length;
 
             const tbody = document.querySelector('#resultTable tbody');
-            tbody.innerHTML = ''; // Kosongkan tabel sebelumnya
+            tbody.innerHTML = ''; 
 
             notFollowingBack.forEach((username, index) => {
                 const tr = document.createElement('tr');
