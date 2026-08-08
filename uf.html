@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram Unfollowers Tracker</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --primary: #0095f6;
+            --primary-hover: #0077c5;
+            --text-main: #262626;
+            --text-muted: #8e8e8e;
+            --border: #dbdbdb;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        h1, h2 {
+            text-align: center;
+            margin-top: 0;
+        }
+        .upload-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: 1px dashed var(--primary);
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .stat-box {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            width: 30%;
+            border: 1px solid var(--border);
+        }
+        .stat-box span {
+            display: block;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background-color: #f9f9f9;
+        }
+        a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        #results {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h1>Cek Unfollowers Instagram</h1>
+        <p style="text-align: center; color: var(--text-muted);">Pilih file JSON dari hasil download data Instagram Anda.</p>
+        
+        <div class="upload-group">
+            <label for="followersFile">1. Upload File Followers (followers_1.json)</label>
+            <input type="file" id="followersFile" accept=".json">
+        </div>
+
+        <div class="upload-group">
+            <label for="followingFile">2. Upload File Following (following.json)</label>
+            <input type="file" id="followingFile" accept=".json">
+        </div>
+
+        <button id="analyzeBtn">Analisis Sekarang</button>
+    </div>
+
+    <div class="card" id="results">
+        <h2>Hasil Analisis</h2>
+        
+        <div class="stats">
+            <div class="stat-box">
+                Mengikuti
+                <span id="followingCount">0</span>
+            </div>
+            <div class="stat-box">
+                Pengikut
+                <span id="followersCount">0</span>
+            </div>
+            <div class="stat-box">
+                Tidak Follback
+                <span id="unfollowersCount">0</span>
+            </div>
+        </div>
+
+        <table id="resultTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Username</th>
+                    <th>Link Profil</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be populated here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // Fungsi untuk mengekstrak username dari struktur JSON Instagram yang bervariasi
+    function extractUsernames(data) {
+        let usernames = new Set();
+        
+        function traverse(obj) {
+            if (Array.isArray(obj)) {
+                obj.forEach(traverse);
+            } else if (obj !== null && typeof obj === 'object') {
+                // Pola umum JSON Instagram
+                if (obj.string_list_data && Array.isArray(obj.string_list_data)) {
+                    obj.string_list_data.forEach(item => {
+                        if (item.value) usernames.add(item.value);
+                    });
+                }
+                Object.values(obj).forEach(traverse);
+            }
+        }
+        
+        traverse(data);
+        return Array.from(usernames);
+    }
+
+    // Fungsi membaca file
+    function readFileAsJSON(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    resolve(JSON.parse(event.target.result));
+                } catch (e) {
+                    reject("Gagal mem-parsing JSON. Pastikan file valid.");
+                }
+            };
+            reader.onerror = (error) => reject(error);
+            reader.readAsText(file);
+        });
+    }
+
+    document.getElementById('analyzeBtn').addEventListener('click', async () => {
+        const followersInput = document.getElementById('followersFile').files[0];
+        const followingInput = document.getElementById('followingFile').files[0];
+
+        if (!followersInput || !followingInput) {
+            alert('Mohon upload kedua file: Followers dan Following.');
+            return;
+        }
+
+        const btn = document.getElementById('analyzeBtn');
+        btn.innerText = 'Memproses...';
+        btn.disabled = true;
+
+        try {
+            const followersData = await readFileAsJSON(followersInput);
+            const followingData = await readFileAsJSON(followingInput);
+
+            const followersList = extractUsernames(followersData);
+            const followingList = extractUsernames(followingData);
+
+            // Hitung siapa yang tidak follback
+            const followersSet = new Set(followersList);
+            const notFollowingBack = followingList.filter(user => !followersSet.has(user));
+
+            // Tampilkan hasil
+            document.getElementById('followersCount').innerText = followersList.length;
+            document.getElementById('followingCount').innerText = followingList.length;
+            document.getElementById('unfollowersCount').innerText = notFollowingBack.length;
+
+            const tbody = document.querySelector('#resultTable tbody');
+            tbody.innerHTML = ''; // Kosongkan tabel sebelumnya
+
+            notFollowingBack.forEach((username, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><b>${username}</b></td>
+                    <td><a href="https://www.instagram.com/${username}" target="_blank">Buka Profil &rarr;</a></td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('results').style.display = 'block';
+            btn.innerText = 'Analisis Selesai (Ulangi)';
+            btn.disabled = false;
+
+        } catch (error) {
+            alert('Terjadi kesalahan: ' + error);
+            btn.innerText = 'Analisis Sekarang';
+            btn.disabled = false;
+        }
+    });
+</script>
+
+</body>
+</html>
