@@ -117,11 +117,11 @@
             display: none;
             background-color: #ffeaea;
             color: var(--danger);
-            padding: 12px;
+            padding: 15px;
             border-radius: 6px;
             margin-bottom: 20px;
             border: 1px solid #ffc2c2;
-            text-align: center;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -181,33 +181,52 @@
 </div>
 
 <script>
-    // Fungsi pintar untuk mengekstrak username dari semua versi JSON Instagram
     function extractUsernames(data) {
         let usernames = new Set();
         
+        // Metode 1: Traversal Objek (Struktur JSON Standar)
         function traverse(obj) {
             if (Array.isArray(obj)) {
                 obj.forEach(traverse);
             } else if (obj !== null && typeof obj === 'object') {
-                // Pola 1: Format standar (string_list_data)
                 if (obj.string_list_data && Array.isArray(obj.string_list_data)) {
                     obj.string_list_data.forEach(item => {
                         if (item.value && typeof item.value === 'string') {
                             usernames.add(item.value);
                         }
                     });
-                } 
-                // Pola 2: Format alternatif (langsung ada href dan value)
-                else if (obj.href && typeof obj.href === 'string' && obj.href.includes('instagram.com') && obj.value) {
+                }
+                if (obj.href && typeof obj.href === 'string' && obj.href.includes('instagram.com') && obj.value) {
                     usernames.add(obj.value);
                 }
-
-                // Teruskan pencarian ke dalam objek
                 Object.values(obj).forEach(traverse);
             }
         }
-        
         traverse(data);
+
+        // Metode 2: Extrem Regex Parsing (Jika Metode 1 gagal / menghasilkan 0)
+        // Ini akan membaca mentah-mentah file tersebut, apa pun struktur JSON-nya
+        if (usernames.size === 0) {
+            const jsonString = JSON.stringify(data);
+            
+            // Ekstrak dari value object langsung
+            const valueRegex = /"value"\s*:\s*"([^"]+)"/g;
+            let match;
+            while ((match = valueRegex.exec(jsonString)) !== null) {
+                usernames.add(match[1]);
+            }
+
+            // Ekstrak dari link URL yang terselip
+            const urlRegex = /instagram\.com\/([a-zA-Z0-9._]+)/g;
+            const ignoreList = ['p', 'reel', 'stories', 'explore', 'direct', 'tv', 'about', 'legal', 'help'];
+            while ((match = urlRegex.exec(jsonString)) !== null) {
+                const uname = match[1];
+                if (!ignoreList.includes(uname.toLowerCase())) {
+                    usernames.add(uname);
+                }
+            }
+        }
+        
         return Array.from(usernames);
     }
 
@@ -218,7 +237,7 @@
                 try {
                     resolve(JSON.parse(event.target.result));
                 } catch (e) {
-                    reject("Gagal membaca file JSON. Pastikan filenya tidak rusak.");
+                    reject("Gagal membaca file JSON. Pastikan format file tidak rusak.");
                 }
             };
             reader.onerror = (error) => reject(error);
@@ -234,7 +253,7 @@
         warningDiv.style.display = 'none';
 
         if (!followersInput || !followingInput) {
-            alert('Mohon upload kedua file: Followers dan Following.');
+            alert('Mohon upload kedua file: Followers dan Following terlebih dahulu.');
             return;
         }
 
@@ -249,8 +268,9 @@
             const followersList = extractUsernames(followersData);
             const followingList = extractUsernames(followingData);
 
+            // Jika kode ekstrem masih gagal menemukan data, berarti filenya benar-benar kosong dari Instagram
             if (followingList.length === 0) {
-                 warningDiv.innerText = "⚠️ Peringatan: 0 Akun 'Mengikuti' ditemukan. Pastikan Anda meng-upload file 'following.json' yang benar (bukan file kosong atau file lain).";
+                 warningDiv.innerHTML = "⚠️ <b>Peringatan:</b> Masih 0 Akun 'Mengikuti' yang terbaca.<br><br><b>Kemungkinan Penyebab:</b><br>File <code>following.json</code> yang Anda download dari Instagram sepertinya <b>benar-benar kosong / corrupt</b>. Silakan coba buka file tersebut dengan aplikasi Notepad. Jika isinya sangat pendek (misal hanya <code>{}</code> atau kosong), Anda perlu me-request ulang download data dari Instagram Anda.";
                  warningDiv.style.display = 'block';
             }
 
