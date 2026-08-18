@@ -876,26 +876,30 @@ document.addEventListener("DOMContentLoaded", function() {
     document.body.appendChild(script);
 });
 
+// Callback Function untuk memproses data dari Blogger
 function showBloggerPosts(data) {
     const bloggerContainer = document.getElementById('blogger-feed');
-    const entries = data.feed.entry;
-
-    if (!entries || entries.length === 0) {
+    
+    if (!data || !data.feed || !data.feed.entry || data.feed.entry.length === 0) {
         bloggerContainer.innerHTML = '<p style="color:var(--text-muted);">Belum ada postingan dari Blogger.</p>';
         return;
     }
 
+    const entries = data.feed.entry;
     let htmlContent = '';
 
     entries.forEach(entry => {
         const title = entry.title.$t;
+
         let postUrl = '#';
         entry.link.forEach(link => {
             if (link.rel === 'alternate') postUrl = link.href;
         });
 
         const publishedDate = new Date(entry.published.$t).toLocaleDateString('en-US', {
-            year: 'numeric', month: 'long', day: 'numeric'
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
         });
 
         let summary = '';
@@ -904,20 +908,49 @@ function showBloggerPosts(data) {
         } else if (entry.content) {
             summary = entry.content.$t.replace(/<[^>]*>/g, '');
         }
-        summary = summary.substring(0, 180) + '...';
+        summary = summary.substring(0, 160) + '...';
 
+        // ---------------------------------------------------------
+        // LOGIK PENGAMBILAN GAMBAR THUMBNAIL BLOGGER
+        // ---------------------------------------------------------
+        let thumbnailUrl = '';
+        if (entry.media$thumbnail) {
+            // Gambar bawaan Blogger biasanya berukuran kecil (72px). 
+            // Kita ubah URL-nya agar ukurannya lebih besar dan jernih (misal: 600x400)
+            thumbnailUrl = entry.media$thumbnail.url.replace(/\/s72\-c\//, '/w600-h400-c/');
+        } else if (entry.content && entry.content.$t.match(/<img.+?src="([^"]+)"/)) {
+            // Jika tidak ada thumbnail, cari gambar pertama di dalam konten artikel
+            thumbnailUrl = entry.content.$t.match(/<img.+?src="([^"]+)"/)[1];
+        } else {
+            // Gambar default jika artikel benar-benar tidak memiliki gambar
+            thumbnailUrl = 'https://picsum.photos/600/400?grayscale';
+        }
+
+        // Template HTML yang sudah ditambahkan layout gambar (Flexbox)
         htmlContent += `
-            <article style="margin-bottom: 30px; border-bottom: 1px dashed var(--border-color); padding-bottom: 20px;">
-                <h3 style="font-size: 1.4rem; font-style: italic; margin-bottom: 5px;">
-                    <a href="${postUrl}" target="_blank" rel="noopener noreferrer" style="color: var(--accent-primary);">
-                        ${title}
+            <article style="display: flex; gap: 20px; margin-bottom: 30px; border-bottom: 1px dashed var(--border-color); padding-bottom: 20px; flex-wrap: wrap; align-items: flex-start;">
+                
+                <!-- Bagian Gambar -->
+                <div style="flex: 1 1 250px; max-width: 100%;">
+                    <a href="${postUrl}" target="_blank" rel="noopener noreferrer">
+                        <img src="${thumbnailUrl}" alt="${title}" style="width: 100%; height: 180px; object-fit: cover; border: 1px solid var(--border-color); transition: transform 0.3s ease;">
                     </a>
-                </h3>
-                <small style="color: var(--text-muted);">Published on ${publishedDate}</small>
-                <p style="margin-top: 10px; font-size: 1rem; color: var(--text-main);">${summary}</p>
-                <a href="${postUrl}" target="_blank" rel="noopener noreferrer" style="display:inline-block; margin-top: 10px; font-size: 0.9rem; text-decoration: underline; color: var(--text-muted);">
-                    Read full article &rarr;
-                </a>
+                </div>
+
+                <!-- Bagian Teks -->
+                <div style="flex: 2 1 400px;">
+                    <h3 style="font-size: 1.4rem; font-style: italic; margin-bottom: 5px;">
+                        <a href="${postUrl}" target="_blank" rel="noopener noreferrer" style="color: var(--accent-primary);">
+                            ${title}
+                        </a>
+                    </h3>
+                    <small style="color: var(--text-muted);">Published on ${publishedDate}</small>
+                    <p style="margin-top: 10px; font-size: 1rem; color: var(--text-main);">${summary}</p>
+                    <a href="${postUrl}" target="_blank" rel="noopener noreferrer" style="display:inline-block; margin-top: 10px; font-size: 0.9rem; text-decoration: underline; color: var(--text-muted);">
+                        Read full article &rarr;
+                    </a>
+                </div>
+
             </article>
         `;
     });
