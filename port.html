@@ -56,6 +56,7 @@
             color: var(--text-main);
             line-height: 1.7;
             font-size: 18px;
+            overflow-x: hidden; /* Mencegah scroll horizontal / potongan di kanan */
         }
 
         a {
@@ -203,7 +204,7 @@
         }
 
         /* ==========================================================================
-           HERO SECTION (Background Photo Style, No Round Profile)
+           HERO SECTION
            ========================================================================== */
         .hero-section {
             position: relative;
@@ -262,7 +263,7 @@
         }
 
         /* ==========================================================================
-           GRID SYSTEM & PORTFOLIO POSTS (4 Projects)
+           GRID SYSTEM & PORTFOLIO POSTS
            ========================================================================== */
         .section-title {
             font-size: 2.2rem;
@@ -278,12 +279,6 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 30px;
             margin-bottom: 60px;
-        }
-
-        @media (max-width: 768px) {
-            .grid-4 {
-                grid-template-columns: 1fr;
-            }
         }
 
         .portfolio-card {
@@ -321,7 +316,7 @@
         }
 
         /* ==========================================================================
-           ACCORDION & CAROUSEL (Below the Fold Content)
+           ACCORDION & CAROUSEL
            ========================================================================== */
         .accordion-item {
             border: 1px solid var(--border-color);
@@ -450,6 +445,31 @@
         }
 
         /* ==========================================================================
+           SCROLL TO TOP BUTTON
+           ========================================================================== */
+        #scrollTopBtn {
+            display: none; /* Disembunyikan secara default */
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            font-size: 1.2rem;
+            border: none;
+            outline: none;
+            background-color: var(--accent-primary);
+            color: white;
+            cursor: pointer;
+            padding: 12px 18px;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+            transition: background-color 0.3s;
+        }
+
+        #scrollTopBtn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        /* ==========================================================================
            FOOTER
            ========================================================================== */
         footer {
@@ -476,6 +496,50 @@
         .footer-socials a:hover {
             color: var(--accent-primary);
         }
+
+        /* ==========================================================================
+           RESPONSIVE DESIGN (MOBILE FIXES)
+           ========================================================================== */
+        @media (max-width: 768px) {
+            .grid-4 {
+                grid-template-columns: 1fr;
+            }
+            
+            /* Perbaikan Menu Terlalu Mepet & Switch Terpotong */
+            .nav-wrapper {
+                flex-direction: column;
+                gap: 15px;
+                padding-bottom: 10px;
+            }
+            .nav-right {
+                flex-direction: column;
+                gap: 15px;
+                width: 100%;
+            }
+            .nav-links {
+                gap: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            /* Penyesuaian Dropdown Menu di Mobile */
+            .dropdown-content {
+                right: auto;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            /* Mencegah Teks Judul Terlalu Besar yang memotong layar */
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            /* Penyesuaian padding saat di HP */
+            .modal-content {
+                padding: 30px 20px;
+                margin: 20px auto;
+            }
+        }
     </style>
 </head>
 <body>
@@ -498,7 +562,7 @@
                     <li><a href="#blogger">Writing</a></li>
                 </ul>
 
-                <!-- Light/Dark Switcher with Clear Hints -->
+                <!-- Light/Dark Switcher -->
                 <div class="theme-switch-wrapper">
                     <span id="theme-hint"><i class="fa-regular fa-sun"></i> Light</span>
                     <label class="theme-switch">
@@ -510,7 +574,7 @@
         </div>
     </header>
 
-    <!-- Hero Section (Background Photo, Editorial Text) -->
+    <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-content">
             <h1 class="hero-title">Selected Works & Editorial Insights</h1>
@@ -533,12 +597,11 @@
 
     <main class="container">
         
-        <!-- Portfolio Projects (4 Items Grid) -->
+        <!-- Portfolio Projects -->
         <section id="projects">
             <h2 class="section-title">Featured Projects</h2>
             <div class="grid-4">
                 
-                <!-- Project 1 -->
                 <article class="portfolio-card" onclick="openModal('project-1')">
                     <img data-src="https://picsum.photos/600/400?random=1" alt="Project 1" class="portfolio-thumbnail lazy">
                     <div class="portfolio-info">
@@ -547,7 +610,6 @@
                     </div>
                 </article>
 
-                <!-- Project 2 -->
                 <article class="portfolio-card" onclick="openModal('project-2')">
                     <img data-src="https://picsum.photos/600/400?random=2" alt="Project 2" class="portfolio-thumbnail lazy">
                     <div class="portfolio-info">
@@ -556,7 +618,6 @@
                     </div>
                 </article>
 
-                <!-- Project 3 -->
                 <article class="portfolio-card" onclick="openModal('project-3')">
                     <img data-src="https://picsum.photos/600/400?random=3" alt="Project 3" class="portfolio-thumbnail lazy">
                     <div class="portfolio-info">
@@ -565,7 +626,6 @@
                     </div>
                 </article>
 
-                <!-- Project 4 -->
                 <article class="portfolio-card" onclick="openModal('project-4')">
                     <img data-src="https://picsum.photos/600/400?random=4" alt="Project 4" class="portfolio-thumbnail lazy">
                     <div class="portfolio-info">
@@ -577,7 +637,7 @@
             </div>
         </section>
 
-        <!-- Below the Fold Content: Pages (About, Resume, CV via Accordion) -->
+        <!-- Pages (About, Resume, CV) -->
         <section id="about">
             <h2 class="section-title">Biography & Experience</h2>
             
@@ -642,7 +702,7 @@
             </div>
         </section>
 
-        <!-- Blogger Feed Integration with Skeleton Screen -->
+        <!-- Blogger Feed -->
         <section id="blogger">
             <h2 class="section-title">Latest Articles (Blogger Feed)</h2>
             <div class="blogger-embed-container" id="blogger-feed">
@@ -668,6 +728,9 @@
         </div>
     </div>
 
+    <!-- Tombol Scroll to Top -->
+    <button id="scrollTopBtn" title="Go to top"><i class="fa-solid fa-arrow-up"></i></button>
+
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -686,9 +749,7 @@
         </div>
     </footer>
 
-    <!-- ==========================================================================
-       JAVASCRIPT INTERACTION LOGIC
-       ========================================================================== -->
+    <!-- JAVASCRIPT -->
     <script>
         /* 1. Theme Switcher (Light / Dark Mode) */
         const themeToggle = document.getElementById('theme-toggle');
@@ -806,7 +867,6 @@
         /* 6. Embedded Blogger Feed with Fallback */
         setTimeout(() => {
             const bloggerContainer = document.getElementById('blogger-feed');
-            // Simulating embedded RSS JSON fetch from Blogger
             bloggerContainer.innerHTML = `
                 <article style="margin-bottom:20px;">
                     <h3 style="font-size:1.4rem; font-style:italic; margin-bottom:5px;">
@@ -816,7 +876,27 @@
                     <p style="margin-top:10px;">An excerpt from my recent Blogger post discussing why removing unnecessary UI frameworks leads to faster load times and better reader retention...</p>
                 </article>
             `;
-        }, 1500); // Replaces Skeleton Screen after loading delay
+        }, 1500);
+
+        /* 7. Scroll to Top Button Logic */
+        const scrollTopBtn = document.getElementById("scrollTopBtn");
+
+        // Memunculkan tombol ketika discroll 200px ke bawah
+        window.addEventListener('scroll', () => {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                scrollTopBtn.style.display = "block";
+            } else {
+                scrollTopBtn.style.display = "none";
+            }
+        });
+
+        // Efek smooth scroll saat tombol diklik
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
     </script>
 </body>
 </html>
