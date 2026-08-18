@@ -864,19 +864,66 @@
             }
         };
 
-        /* 6. Embedded Blogger Feed with Fallback */
-        setTimeout(() => {
-            const bloggerContainer = document.getElementById('blogger-feed');
-            bloggerContainer.innerHTML = `
-                <article style="margin-bottom:20px;">
-                    <h3 style="font-size:1.4rem; font-style:italic; margin-bottom:5px;">
-                        <a href="#" style="color:var(--accent-primary);">Notes on Digital Minimalism in Modern Web Architecture</a>
-                    </h3>
-                    <small style="color:var(--text-muted);">Published on Blogger — August 2026</small>
-                    <p style="margin-top:10px;">An excerpt from my recent Blogger post discussing why removing unnecessary UI frameworks leads to faster load times and better reader retention...</p>
-                </article>
-            `;
-        }, 1500);
+        /* 6. Embedded Blogger Feed dari Blogspot Asli */
+document.addEventListener("DOMContentLoaded", function() {
+    // GANTI DENGAN DOMAIN BLOGGER ANDA SINI
+    const bloggerDomain = "robbirizaldi.blogspot.com"; 
+    
+    const feedUrl = `https://${bloggerDomain}/feeds/posts/default?alt=json-in-script&max-results=3&callback=showBloggerPosts`;
+
+    const script = document.createElement('script');
+    script.src = feedUrl;
+    document.body.appendChild(script);
+});
+
+function showBloggerPosts(data) {
+    const bloggerContainer = document.getElementById('blogger-feed');
+    const entries = data.feed.entry;
+
+    if (!entries || entries.length === 0) {
+        bloggerContainer.innerHTML = '<p style="color:var(--text-muted);">Belum ada postingan dari Blogger.</p>';
+        return;
+    }
+
+    let htmlContent = '';
+
+    entries.forEach(entry => {
+        const title = entry.title.$t;
+        let postUrl = '#';
+        entry.link.forEach(link => {
+            if (link.rel === 'alternate') postUrl = link.href;
+        });
+
+        const publishedDate = new Date(entry.published.$t).toLocaleDateString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric'
+        });
+
+        let summary = '';
+        if (entry.summary) {
+            summary = entry.summary.$t;
+        } else if (entry.content) {
+            summary = entry.content.$t.replace(/<[^>]*>/g, '');
+        }
+        summary = summary.substring(0, 180) + '...';
+
+        htmlContent += `
+            <article style="margin-bottom: 30px; border-bottom: 1px dashed var(--border-color); padding-bottom: 20px;">
+                <h3 style="font-size: 1.4rem; font-style: italic; margin-bottom: 5px;">
+                    <a href="${postUrl}" target="_blank" rel="noopener noreferrer" style="color: var(--accent-primary);">
+                        ${title}
+                    </a>
+                </h3>
+                <small style="color: var(--text-muted);">Published on ${publishedDate}</small>
+                <p style="margin-top: 10px; font-size: 1rem; color: var(--text-main);">${summary}</p>
+                <a href="${postUrl}" target="_blank" rel="noopener noreferrer" style="display:inline-block; margin-top: 10px; font-size: 0.9rem; text-decoration: underline; color: var(--text-muted);">
+                    Read full article &rarr;
+                </a>
+            </article>
+        `;
+    });
+
+    bloggerContainer.innerHTML = htmlContent;
+}
 
         /* 7. Scroll to Top Button Logic */
         const scrollTopBtn = document.getElementById("scrollTopBtn");
