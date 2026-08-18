@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080a0d">
+  <meta name="description" content="NET/METER — browser-based internet speed test.">
+  <title>NET/METER — Internet Speed Test</title>
+  <link rel="preconnect" href="https://speed.cloudflare.com">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="NET/METER home">
+      <span class="brand-mark">N/</span>
+      <span>NET<span>/</span>METER</span>
+    </a>
+    <div class="top-status">
+      <span class="status-dot"></span>
+      <span id="connectionText">READY</span>
+      <span class="slash">/</span>
+      <span id="clock">--:--:--</span>
+    </div>
+    <a class="github-link" href="https://github.com/" target="_blank" rel="noreferrer">SOURCE ↗</a>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <div class="eyebrow">LOCAL NETWORK DIAGNOSTIC // 01</div>
+      <h1>Measure the line,<br><em>not the marketing.</em></h1>
+      <p class="intro-copy">
+        A lightweight browser speed test with a technical instrument feel.
+        No accounts, no dashboard clutter, just the numbers that matter.
+      </p>
+    </section>
+
+    <section class="instrument" aria-label="Speed test">
+      <div class="instrument-head">
+        <div>
+          <span class="micro-label">TEST ENGINE</span>
+          <strong id="phase">IDLE</strong>
+        </div>
+        <div class="server">
+          <span class="micro-label">TEST HOST</span>
+          <strong>Cloudflare Edge</strong>
+        </div>
+      </div>
+
+      <div class="gauge-wrap">
+        <div class="gauge-grid"></div>
+        <div class="gauge" id="gauge">
+          <div class="gauge-ring ring-a"></div>
+          <div class="gauge-ring ring-b"></div>
+          <div class="gauge-ticks"></div>
+          <div class="gauge-center">
+            <div class="gauge-value" id="speedValue">0</div>
+            <div class="gauge-unit" id="speedUnit">Mbps</div>
+            <div class="gauge-phase" id="gaugePhase">WAITING</div>
+          </div>
+        </div>
+      </div>
+
+      <button id="startBtn" class="start-btn">
+        <span class="btn-icon">▶</span>
+        <span id="startText">START TEST</span>
+      </button>
+
+      <div class="live-readout">
+        <div class="metric-row">
+          <div class="metric-label"><span class="bar cyan"></span>DOWNLOAD</div>
+          <div class="metric-track"><span id="downloadBar"></span></div>
+          <strong id="downloadValue">—</strong>
+          <small>Mbps</small>
+        </div>
+        <div class="metric-row">
+          <div class="metric-label"><span class="bar violet"></span>UPLOAD</div>
+          <div class="metric-track"><span id="uploadBar"></span></div>
+          <strong id="uploadValue">—</strong>
+          <small>Mbps</small>
+        </div>
+        <div class="metric-row compact">
+          <div class="metric-label"><span class="bar yellow"></span>LATENCY</div>
+          <div class="latency-line"><span id="latencyDots"></span></div>
+          <strong id="pingValue">—</strong>
+          <small>ms</small>
+        </div>
+      </div>
+
+      <div class="instrument-foot">
+        <span id="testNote">Press start to begin a live network measurement.</span>
+        <span id="progress">0%</span>
+      </div>
+    </section>
+
+    <section class="details">
+      <article class="detail-card">
+        <span class="micro-label">CONNECTION</span>
+        <h2 id="connectionType">Detecting…</h2>
+        <p id="connectionMeta">Browser network information</p>
+      </article>
+      <article class="detail-card">
+        <span class="micro-label">PUBLIC ADDRESS</span>
+        <h2 id="ipAddress">Not requested</h2>
+        <p>IP lookup is optional and privacy-conscious.</p>
+      </article>
+      <article class="detail-card">
+        <span class="micro-label">QUALITY</span>
+        <h2 id="quality">—</h2>
+        <p id="qualityMeta">Run a test to classify the line.</p>
+      </article>
+    </section>
+
+    <section class="history">
+      <div class="section-title">
+        <span>RECENT READINGS</span>
+        <button id="clearHistory" type="button">CLEAR</button>
+      </div>
+      <div id="historyList" class="history-list">
+        <div class="empty-history">No readings yet.</div>
+      </div>
+    </section>
+
+    <footer>
+      <span>NET/METER — STATIC WEB TOOL</span>
+      <span>BUILT FOR GITHUB PAGES</span>
+      <span>v1.0.0</span>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
