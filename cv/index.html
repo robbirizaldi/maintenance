@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robbi Rizaldi - Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --accent-blue: #38bdf8;
+            --accent-purple: #818cf8;
+            --accent-green: #34d399;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-blue);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero-content {
+            max-width: 850px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-blue);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #f8fafc, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero h2 {
+            font-size: 1.8rem;
+            color: var(--accent-blue);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            text-align: justify;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .social-btn:hover {
+            background: var(--accent-blue);
+            color: var(--bg-primary);
+            transform: translateY(-3px);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 60%;
+            height: 4px;
+            background: var(--accent-blue);
+            border-radius: 2px;
+        }
+
+        /* Skills Grid */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.8rem;
+            border-radius: 12px;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-blue);
+        }
+
+        .skill-card h3 {
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+            font-size: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-5px);
+        }
+
+        .project-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.6rem;
+            color: var(--text-primary);
+        }
+
+        .project-tech {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--accent-purple);
+            margin-bottom: 1rem;
+        }
+
+        .project-bullets {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        .project-bullets li {
+            position: relative;
+            padding-left: 1.2rem;
+            margin-bottom: 0.6rem;
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+        }
+
+        .project-bullets li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--accent-blue);
+        }
+
+        /* Experience Timeline */
+        .timeline {
+            position: relative;
+            border-left: 2px solid var(--border-color);
+            padding-left: 2rem;
+            margin-left: 1rem;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2.5rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: calc(-2rem - 6px);
+            top: 5px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            border: 2px solid var(--bg-primary);
+        }
+
+        .timeline-role {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .timeline-company {
+            color: var(--accent-blue);
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-date {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-family: 'Fira Code', monospace;
+            margin-bottom: 1rem;
+        }
+
+        /* Education Container */
+        .education-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .edu-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 12px;
+        }
+
+        .edu-card h3 {
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            margin-bottom: 0.4rem;
+        }
+
+        .edu-card .institution {
+            color: var(--accent-blue);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .edu-card .gpa {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent-green);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            background: var(--bg-primary);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero h2 { font-size: 1.3rem; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">&lt;RobbiRizaldi /&gt;</a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#education">Education</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="about">
+        <div class="hero-content">
+            <span class="badge">Open for Opportunities</span>
+            <h1>Robbi Rizaldi</h1>
+            <h2>Data Practitioner & Technical Specialist</h2>
+            <p>
+                Data practitioner with a practical foundation in data analysis, statistics, and visualization. Experienced in utilizing SQL, Python, Excel, and Power BI to clean datasets, uncover insights, and construct clear dashboards. Possesses hands-on technical skills in hardware maintenance, OS installation (Windows & Linux), software setup, as well as web server management using cPanel, hosting, and WordPress CMS. Detail-oriented and continuously learning to apply technical skills in a business setting.
+            </p>
+            <div class="social-links">
+                <a href="mailto:robbirizaldi17@gmail.com" class="social-btn" title="Email"><i class="fas fa-envelope"></i></a>
+                <a href="https://linkedin.com/in/robbirizaldi" target="_blank" class="social-btn" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://github.com/robbirizaldi" target="_blank" class="social-btn" title="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://vercel.com/robbirizaldi" target="_blank" class="social-btn" title="Vercel"><i class="fas fa-globe"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills">
+        <h2 class="section-title">Technical Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <h3><i class="fas fa-code"></i> Programming & Query</h3>
+                <div class="skill-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">SQL</span>
+                    <span class="tag">HTML/CSS</span>
+                    <span class="tag">Java</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <h3><i class="fas fa-chart-bar"></i> Data Analytics & ML</h3>
+                <div class="skill-tags">
+                    <span class="tag">Pandas</span>
+                    <span class="tag">NumPy</span>
+                    <span class="tag">Scikit-learn</span>
+                    <span class="tag">TensorFlow / Keras</span>
+                    <span class="tag">EDA</span>
+                    <span class="tag">ARIMA / SARIMAX</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <h3><i class="fas fa-desktop"></i> Visualization & Tools</h3>
+                <div class="skill-tags">
+                    <span class="tag">Power BI</span>
+                    <span class="tag">Tableau</span>
+                    <span class="tag">Matplotlib / Seaborn</span>
+                    <span class="tag">MS Excel (Advanced)</span>
+                    <span class="tag">Power Query</span>
+                </div>
+            </div>
+            <div class="skill-card">
+                <h3><i class="fas fa-server"></i> IT & System Admin</h3>
+                <div class="skill-tags">
+                    <span class="tag">Hardware Maintenance</span>
+                    <span class="tag">OS Setup (Windows/Linux)</span>
+                    <span class="tag">Networking (TKJ)</span>
+                    <span class="tag">cPanel & Web Hosting</span>
+                    <span class="tag">WordPress CMS</span>
+                    <span class="tag">MySQL / PostgreSQL</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-grid">
+            
+            <div class="project-card">
+                <div>
+                    <h3>Mobile Legends Sentiment Analysis</h3>
+                    <p class="project-tech">Python | Pandas | TensorFlow | Scikit-learn | TF-IDF | Neural Network</p>
+                    <ul class="project-bullets">
+                        <li>Collected and preprocessed a dataset of 50,000 Mobile Legends user reviews from Google Play Store using web scraping.</li>
+                        <li>Cleaned and standardized Indonesian text data using Python, Pandas, regex, and Sastrawi for case folding, slang normalization, and stopword removal.</li>
+                        <li>Performed binary sentiment classification (positive & negative) using TF-IDF feature extraction.</li>
+                        <li>Built and evaluated a Feedforward Neural Network model using TensorFlow/Keras, achieving 83.3% accuracy and 0.852 ROC-AUC.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div>
+                    <h3>Motorcycle Accessories Administrative System</h3>
+                    <p class="project-tech">Java NetBeans | MySQL | XAMPP | UML | Software Engineering</p>
+                    <ul class="project-bullets">
+                        <li>Collaborated in a team of 5 to design and develop a desktop-based administrative system for WV Jangkrik shop.</li>
+                        <li>Modeled software requirements using UML diagrams (Use Case, Activity, Sequence, and Class Diagrams).</li>
+                        <li>Implemented inventory tracking, purchasing, and transaction features using Java NetBeans integrated with MySQL database via XAMPP.</li>
+                        <li>Automated reporting workflows for stock management, employee data, and payment logs.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div>
+                    <h3>Anime Streaming & Download Platform</h3>
+                    <p class="project-tech">WordPress | cPanel | Web Hosting | CMS | Database Filtering</p>
+                    <ul class="project-bullets">
+                        <li>Developed and customized a dynamic streaming/download website for anime content using WordPress hosted via cPanel.</li>
+                        <li>Implemented custom taxonomy and filtering features allowing users to sort content by release season, year, and ratings.</li>
+                        <li>Structured media database and categories to streamline content indexing and download links.</li>
+                        <li>Optimized site layout, navigation, and user interface for an intuitive viewing experience.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div>
+                    <h3>Time Series Forecasting of Educational Trends</h3>
+                    <p class="project-tech">Python | Pandas | ARIMA | SARIMAX | Prophet</p>
+                    <ul class="project-bullets">
+                        <li>Developed forecasting models using statistical and machine learning approaches (ARIMA, Prophet, and regression-based models) to analyze educational trends.</li>
+                        <li>Performed time series decomposition and feature engineering to capture seasonality and trends for improved prediction accuracy.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+        <h2 class="section-title">Work Experience</h2>
+        <div class="timeline">
+            
+            <div class="timeline-item">
+                <div class="timeline-role">Desk Collection</div>
+                <div class="timeline-company">PT. Rapolo (Daily Worker)</div>
+                <div class="timeline-date">Apr 2026 – Aug 2026</div>
+                <ul class="project-bullets">
+                    <li>Contacted delinquent debtors via phone/email/chat to negotiate manageable repayment schedules.</li>
+                    <li>Monitored payment promises, updated transaction logs, and maintained CRM system records.</li>
+                    <li>Escalated high-risk or severely overdue accounts to field collection teams or legal departments.</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-role">KTMDU Partner</div>
+                <div class="timeline-company">SAMSAT Depok (Part-time)</div>
+                <div class="timeline-date">Apr 2021 – Jun 2021</div>
+                <ul class="project-bullets">
+                    <li>Conducted field verification of vehicle ownership status and delivered tax delinquency notices.</li>
+                    <li>Collected and verified information from vehicle owners to support administrative records.</li>
+                </ul>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-role">Network Technician</div>
+                <div class="timeline-company">PT. PC24 Telin (Internship)</div>
+                <div class="timeline-date">Nov 2019 – Jan 2020</div>
+                <ul class="project-bullets">
+                    <li>Installed and maintained internet network infrastructure and configured routers.</li>
+                    <li>Performed fiber optic cable installation and basic network troubleshooting.</li>
+                </ul>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education">
+        <h2 class="section-title">Education</h2>
+        <div class="education-container">
+            <div class="edu-card">
+                <h3>Bachelor of Computer Science (S.Kom) in Informatics Engineering</h3>
+                <div class="institution">Indraprasta PGRI University (UNINDRA)</div>
+                <div class="timeline-date">Jul 2021 – 2026</div>
+                <div class="gpa">GPA: 3.20 / 4.00</div>
+            </div>
+            <div class="edu-card">
+                <h3>Computer and Network Engineering (TKJ)</h3>
+                <div class="institution">SMK Taruna Bhakti Depok</div>
+                <div class="timeline-date">2017 – 2020</div>
+                <div class="gpa">Average Score: 8.4 / 10.0</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Robbi Rizaldi. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
